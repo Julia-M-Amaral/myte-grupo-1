@@ -5,8 +5,6 @@ namespace Myte.Models
 {
     public class WBS
     {
-        [Required]
-        [Display(Name = "ID")]
         public int WBSId { get; set; }
 
         [Required(ErrorMessage = "O código é obrigatório!")]

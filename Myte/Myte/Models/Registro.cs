@@ -4,11 +4,10 @@ namespace Myte.Models
 {
     public class Registro
     {
-        [Display(Name = "Registro-ID")]
         public int RegistroId { get; set; }
 
-        [Display(Name = "Funcionário")]
         public Funcionario? Funcionario { get; set; }
+        [Display(Name = "Funcionário")]
 
         public int FuncionarioId { get; set; }
 
@@ -22,7 +21,9 @@ namespace Myte.Models
         [Range(8, 12, ErrorMessage = "O valor deve estar entre 8 e 12 horas.")]
         public double HorasTrab { get; set; }
 
-        [Display(Name = "Dia da Semana")]
-        public DateTime DiaSemana { get; set; }
+        [Required(ErrorMessage = "A data é obrigatória")]
+        [Display(Name = "Data")]
+        [DataType(DataType.Date)]
+        public DateTime DataRegistro { get; set; }
     }
 }
