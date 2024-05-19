@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Myte.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Myte.Models
 {
     public class Funcionario
     {
-        [Display(Name = "ID")]
         public int FuncionarioId { get; set; }
 
         [Required(ErrorMessage = "O nome é obrigatório")]
@@ -21,7 +21,10 @@ namespace Myte.Models
 
         [Required(ErrorMessage = "A data de contratação é obrigatória")]
         [Display(Name = "Data De Contratação")]
+        [DataType(DataType.Date)]
         public DateTime DataContratacao { get; set; }
+
+
 
         [Display(Name = "Departamento")]
         public Departamento? Departamento { get; set; }
@@ -29,11 +32,17 @@ namespace Myte.Models
         [Display(Name = "DepartamentoId")]
         public int DepartamentoId { get; set; }
 
+
+
         [Display(Name = "Nível de Acesso")]
         public string? NivelAcesso { get; set; } = "Funcionario";
 
-        [Display(Name = "Status")]
-        public string? StatusFunc { get; set; } = "Ativo";
+
+
+        [Required(ErrorMessage = "O status do funcionário é obrigatório")]
+        [Display(Name = "Status do Funcionário")]
+        public FuncionarioStatus Status { get; set; }
+
 
         public ICollection<Registro>? Registros { get; set; }
     }
