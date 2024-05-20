@@ -19,11 +19,24 @@ namespace Myte.Controllers
             _context = context;
         }
 
-        // GET: Departamentoes
-        public async Task<IActionResult> Index()
+        //Teste Busca
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Departamento.ToListAsync());
+            var query = _context.Departamento.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(d => d.DepartamentoNome.Contains(searchString));
+            }
+
+            return View(await query.ToListAsync());
         }
+
+        // GET: Departamentoes
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Departamento.ToListAsync());
+        //}
 
         // GET: Departamentoes/Details/5
         public async Task<IActionResult> Details(int? id)
