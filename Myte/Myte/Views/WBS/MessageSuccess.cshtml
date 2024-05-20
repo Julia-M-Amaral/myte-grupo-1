@@ -1,0 +1,39 @@
+﻿<!-- View: MessageSuccess.cshtml -->
+@{
+    ViewData["Title"] = "MessageSuccess";
+}
+
+<div id="toast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <strong class="mr-auto text-black">Success</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="toast-body text-white">
+        Sua operação foi realizada com sucesso.
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Exibir o "toast"
+            $('.toast').toast('show');
+
+            // Adicionar evento de clique ao botão de fechar
+            $('.close').on('click', function () {
+                // Esconder o "toast" imediatamente
+                $('.toast').toast('hide');
+
+                // Redirecionar para a página Index
+                window.location.href = '@Url.Action("Index", "Wbs")';
+            });
+
+            // Redirecionar para a página Index após 2 segundos
+            setTimeout(function () {
+                window.location.href = '@Url.Action("Index", "Wbs")';
+            }, 2000); // Tempo em milissegundos (2 segundos)
+        });
+    </script>
+}

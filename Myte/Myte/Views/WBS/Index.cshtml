@@ -3,11 +3,29 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<h1>Index</h1>
+<h1>WBS</h1>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Index" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="searchString" placeholder="Buscar código ou descrição...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    <!-- Botão "Lista Completa" -->
+                    <a asp-action="Index" class="btn btn-secondary">Lista Completa</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-dark">Nova WBS</a>
 </p>
 <table class="table">
     <thead>
@@ -25,23 +43,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Codigo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipos)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WBSId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WBSId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WBSId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipos)
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-pencil-fill"></i></a>
+                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-card-checklist"></i></a>
+                    <a asp-action="Delete" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-trash3-fill"></i></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
