@@ -8,11 +8,12 @@ namespace Myte.Models
         public int FuncionarioId { get; set; }
 
         [Required(ErrorMessage = "O nome é obrigatório")]
-        [Display(Name = "Nome")]
+        [Display(Name = "Nome Completo")]
         public string? FuncionarioNome { get; set; }
 
         [EmailAddress]
-        [Required(ErrorMessage = "O email é obrigatório")]
+        [Required(ErrorMessage = "O e-mail é obrigatório")]
+        [Display(Name = "E-mail")]
         public string? Email { get; set; }
 
         [DataType(DataType.Password)]
@@ -40,7 +41,7 @@ namespace Myte.Models
 
 
         [Required(ErrorMessage = "O status do funcionário é obrigatório")]
-        [Display(Name = "Status do Funcionário")]
+        [Display(Name = "Status")]
         public FuncionarioStatus Status { get; set; }
 
 
