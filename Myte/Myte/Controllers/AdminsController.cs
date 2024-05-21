@@ -10,28 +10,47 @@ using Myte.Models;
 
 namespace Myte.Controllers
 {
-    public class RegistroesController : Controller
+    public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RegistroesController(ApplicationDbContext context)
+        public AdminsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult AdmIndex()
+        public IActionResult Index(string searchString, DateTime? dataInicio, DateTime? dataFim)
         {
-            return View();
+            var registros = _context.Registro
+                .Include(r => r.Funcionario)
+                .Include(r => r.WBS)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                registros = registros.Where(r =>
+                    r.Funcionario.FuncionarioNome.Contains(searchString) ||
+                    r.WBS.Codigo.Contains(searchString));
+            }
+
+            // Filtra por período de registro (se as datas forem fornecidas)
+            if (dataInicio.HasValue && dataFim.HasValue)
+            {
+                registros = registros.Where(r =>
+                    r.DataRegistro >= dataInicio.Value && r.DataRegistro <= dataFim.Value);
+            }
+
+            return View(registros.ToList());
         }
 
-        // GET: Registroes
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Registro.Include(r => r.Funcionario).Include(r => r.WBS);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        // GET: Admins
+        //public async Task<IActionResult> Index()
+        //{
+        //    var applicationDbContext = _context.Registro.Include(r => r.Funcionario).Include(r => r.WBS);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
 
-        // GET: Registroes/Details/5
+        // GET: Admins/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,15 +70,15 @@ namespace Myte.Controllers
             return View(registro);
         }
 
-        // GET: Registroes/Create
+        // GET: Admins/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email");
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
             return View();
         }
 
-        // POST: Registroes/Create
+        // POST: Admins/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -72,12 +91,12 @@ namespace Myte.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
 
-        // GET: Registroes/Edit/5
+        // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,12 +109,12 @@ namespace Myte.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
 
-        // POST: Registroes/Edit/5
+        // POST: Admins/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -127,12 +146,12 @@ namespace Myte.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
 
-        // GET: Registroes/Delete/5
+        // GET: Admins/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,7 +171,7 @@ namespace Myte.Controllers
             return View(registro);
         }
 
-        // POST: Registroes/Delete/5
+        // POST: Admins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

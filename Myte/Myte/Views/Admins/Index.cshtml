@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Myte.Models.Registro>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Index" method="get">
+            <div class="input-group mb-3" style="width: 150%;">
+                <input type="text" class="form-control" name="searchString" placeholder="Buscar funcionário...">
+                <label>Data Inicial</label>
+                <input type="date" class="form-control" name="dataInicio" placeholder="Data de Início">
+                <label>Data Final</label>
+                <input type="date" class="form-control" name="dataFim" placeholder="Data de Término">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit">Buscar</button>
+                    <!-- Botão "Lista Completa" -->
+                    <a asp-action="Index" class="btn btn-outline-secondary">Lista Completa</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> 
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Funcionario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WBS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HorasTrab)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataRegistro)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcionario.FuncionarioNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WBS.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HorasTrab)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataRegistro)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RegistroId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RegistroId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RegistroId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<strong>Total de Horas = @Model.Sum(obj => obj.HorasTrab).ToString()</strong>
