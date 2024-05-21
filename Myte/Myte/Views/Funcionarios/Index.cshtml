@@ -4,12 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    table.table-hover tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+</style>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div style="text-align: center;">
+    <h2>LISTA DE FUNCIONÁRIOS</h2>
+    <br />
+    <p>
+        <a asp-action="Create" class="btn btn-dark">CADASTRAR</a>
+    </p>
+</div>
+<br />
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -18,9 +32,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Senha)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.DataContratacao)
             </th>
@@ -37,35 +49,34 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FuncionarioNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Senha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataContratacao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Departamento.DepartamentoNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NivelAcesso)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FuncionarioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FuncionarioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FuncionarioId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FuncionarioNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataContratacao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Departamento.DepartamentoNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NivelAcesso)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.FuncionarioId"><i class="bi bi-pencil-fill"></i></a>
+                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.FuncionarioId"><i class="bi bi-card-checklist"></i></a>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.FuncionarioId"><i class="bi bi-trash3-fill"></i></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
