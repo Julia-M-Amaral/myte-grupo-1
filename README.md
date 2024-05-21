@@ -37,4 +37,4 @@ O sistema utiliza uma base de dados SQL do SLQ Server e foi produzido utilizando
 
 - [@Caazia](https://github.com/caazia)
 
-- [@KisaSantosDevAvanade](https://github.com/KisaSantosDevAvanade)
+- [@KisaSantos](https://github.com/JPsantosdev)
