@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.navcolor {
+    background: rgb(255,232,112);
+    background: linear-gradient(90deg, rgba(255,232,112,1) 0%, rgba(236,103,61,1) 100%);
+}
+
