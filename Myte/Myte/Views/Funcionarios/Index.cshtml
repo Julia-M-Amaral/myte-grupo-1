@@ -5,6 +5,31 @@
 }
 
 <style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<style>
     table.table-hover tbody tr:hover {
         background-color: #f2f2f2;
     }
@@ -19,11 +44,9 @@
 </div>
 <br />
 
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-
-<table class="table table-hover">
+<table class="table table-hover white-background">
     <thead>
         <tr>
             <th>
@@ -32,7 +55,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.DataContratacao)
             </th>
@@ -58,7 +80,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.DataContratacao)
                 </td>

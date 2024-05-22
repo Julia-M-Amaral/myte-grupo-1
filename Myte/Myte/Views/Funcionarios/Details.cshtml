@@ -1,9 +1,34 @@
 ﻿@model Myte.Models.Funcionario
 
 @{
-    ViewData["Title"] = "Detalhes do Funcionário";
+    ViewData["Title"] = "DETALHES FUNCIONÁRIO";
 }
 
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -33,7 +58,9 @@
                 <div class="text-center">
                     <a asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
                 </div>
+                <br />
             </div>
+          
         </div>
     </div>
 </div>
