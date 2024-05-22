@@ -57,11 +57,6 @@ namespace Myte.Controllers
             return View(wBS);
         }
 
-        //WBS/Mensagem de sucesso
-        public IActionResult MessageSuccess()
-        {
-            return View();
-        }
 
         // GET: WBS/Create
         public IActionResult Create()
@@ -80,8 +75,8 @@ namespace Myte.Controllers
             {
                 _context.Add(wBS);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return RedirectToAction("MessageSuccess");
+                return RedirectToAction(nameof(Index));
+
             }
             return View(wBS);
         }
@@ -120,7 +115,7 @@ namespace Myte.Controllers
                 {
                     _context.Update(wBS);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("MessageSuccess");
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -133,7 +128,7 @@ namespace Myte.Controllers
                         throw;
                     }
                 }
-                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
             return View(wBS);
         }
@@ -168,8 +163,8 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
-            return RedirectToAction("MessageSuccess");
+            return RedirectToAction(nameof(Index));
+
         }
 
         private bool WBSExists(int id)
