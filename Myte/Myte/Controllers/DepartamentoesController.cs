@@ -32,13 +32,13 @@ namespace Myte.Controllers
             return View(await query.ToListAsync());
         }
 
-        // GET: Departamentoes
+        // GET: Departamento
         //public async Task<IActionResult> Index()
         //{
         //    return View(await _context.Departamento.ToListAsync());
         //}
 
-        // GET: Departamentoes/Details/5
+        // GET: Departamento/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -73,6 +73,13 @@ namespace Myte.Controllers
             {
                 _context.Add(departamento);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "DEPARTAMENTO CRIADO COM SUCESSO";
+                
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["message error"] = "ERRO NA CRIAÇÃO DE DEPARTAMENTO";
                 return RedirectToAction(nameof(Index));
             }
             return View(departamento);
@@ -112,6 +119,7 @@ namespace Myte.Controllers
                 {
                     _context.Update(departamento);
                     await _context.SaveChangesAsync();
+                    TempData["message"] = "DEPARTAMENTO EDITADO COM SUCESSO";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +129,8 @@ namespace Myte.Controllers
                     }
                     else
                     {
-                        throw;
+                        TempData["message error"] = "ERRO NA CRIAÇÃO DE DEPARTAMENTO";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -159,6 +168,7 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["message"] = "DEPARTAMENTO DELETADO COM SUCESSO";
             return RedirectToAction(nameof(Index));
         }
 
