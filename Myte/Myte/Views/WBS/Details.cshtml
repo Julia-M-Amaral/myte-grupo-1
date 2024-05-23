@@ -4,11 +4,36 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
 
-<div>
-    <h4>WBS</h4>
-    <hr />
+    .text-center-content {
+        text-align: center;
+    }
+
+    .text-center-btn {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">DETALHES WBS</h2>
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Codigo)
@@ -30,7 +55,11 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.WBSId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <div class="form-group text-center">
+                    <a asp-action="Edit" asp-route-id="@Model?.WBSId" class="btn btn-dark">Editar</a> |
+                    <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
 </div>
+<br />
+
+
+

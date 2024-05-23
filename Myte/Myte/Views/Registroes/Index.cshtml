@@ -4,50 +4,90 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Funcionario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WBS)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HorasTrab)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataRegistro)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Funcionario.FuncionarioNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WBS.Codigo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HorasTrab)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataRegistro)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RegistroId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RegistroId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RegistroId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div style="text-align: center;">
+    <h2>CONTROLE DE HORAS</h2>
+    <br />
+    <p>
+        <a asp-action="Create" class="btn btn-dark">CADASTRAR</a>
+    </p>
+</div>
+<br />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="white-background">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Funcionario)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WBS)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.HorasTrab)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DataRegistro)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Funcionario.FuncionarioNome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WBS.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HorasTrab)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataRegistro)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.RegistroId"><i class="bi bi-pencil-fill"></i></a>
+                                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.RegistroId"><i class="bi bi-card-checklist"></i></a>
+                                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.RegistroId"><i class="bi bi-trash3-fill"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

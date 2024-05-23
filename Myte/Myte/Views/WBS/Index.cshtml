@@ -3,9 +3,41 @@
 @{
     ViewData["Title"] = "Index";
 }
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<h1>WBS</h1>
+<div style="text-align: center;">
+    <h2>WBS</h2>
+    <br />
+    <p>
+        <a asp-action="Create" class="btn btn-dark">CADASTRAR</a>
+    </p>
+</div>
 <br />
 
 <div class="row">
@@ -14,8 +46,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchString" placeholder="Buscar código ou descrição...">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-                    <!-- Botão "Lista Completa" -->
+                    <button class="btn btn-secondary" type="submit">Buscar</button>
                     <a asp-action="Index" class="btn btn-secondary">Lista Completa</a>
                 </div>
             </div>
@@ -23,44 +54,42 @@
     </div>
 </div>
 
-
-<p>
-    <a asp-action="Create" class="btn btn-dark">Nova WBS</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Codigo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipos)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="white-background">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Codigo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descricao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tipos)
-                </td>
-                <td>
-                    <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-pencil-fill"></i></a>
-                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-card-checklist"></i></a>
-                    <a asp-action="Delete" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-trash3-fill"></i></a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Codigo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipos)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipos)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.WBSId"><i class="bi bi-pencil-fill"></i></a>
+                        <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.WBSId"><i class="bi bi-card-checklist"></i></a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.WBSId"><i class="bi bi-trash3-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
