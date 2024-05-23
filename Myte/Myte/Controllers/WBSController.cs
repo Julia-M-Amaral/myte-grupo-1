@@ -75,6 +75,7 @@ namespace Myte.Controllers
             {
                 _context.Add(wBS);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "WBS CRIADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
 
             }
@@ -115,7 +116,8 @@ namespace Myte.Controllers
                 {
                     _context.Update(wBS);
                     await _context.SaveChangesAsync();
-                    
+                    TempData["message"] = "WBS EDITADO COM SUCESSO";
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -163,6 +165,7 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["message"] = "WBS DELETADO COM SUCESSO";
             return RedirectToAction(nameof(Index));
 
         }
