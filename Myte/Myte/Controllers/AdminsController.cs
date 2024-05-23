@@ -89,6 +89,7 @@ namespace Myte.Controllers
             {
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "ADMINS CRIADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
@@ -132,6 +133,7 @@ namespace Myte.Controllers
                 {
                     _context.Update(registro);
                     await _context.SaveChangesAsync();
+                    TempData["message"] = "ADMINS EDITADO COM SUCESSO";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -183,6 +185,7 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["message"] = "ADMINS DELETADO COM SUCESSO";
             return RedirectToAction(nameof(Index));
         }
 
