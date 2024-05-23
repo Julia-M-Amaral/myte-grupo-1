@@ -133,7 +133,7 @@ namespace Myte.Controllers
                 {
                     _context.Update(registro);
                     await _context.SaveChangesAsync();
-                    TempData["message"] = "ADMINS EDITADO COM SUCESSO";
+                    TempData["message"] = "REGISTRO EDITADO COM SUCESSO";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -185,7 +185,7 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
-            TempData["message"] = "ADMINS DELETADO COM SUCESSO";
+            TempData["message"] = "REGISTRO DELETADO COM SUCESSO";
             return RedirectToAction(nameof(Index));
         }
 
