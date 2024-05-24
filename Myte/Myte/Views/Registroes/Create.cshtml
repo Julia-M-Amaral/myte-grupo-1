@@ -82,17 +82,13 @@
             <tr>
                 <th>WBS</th>
                 <!-- Date headers will be inserted here dynamically -->
-
             </tr>
         </thead>
         <tbody>
             <!-- Rows with task select and input fields for hours will be inserted here dynamically -->
         </tbody>
         <tfoot>
-            <tr>
-                <td>Total Hours</td>
-                <!-- Total hours will be inserted here dynamically -->
-            </tr>
+            <!-- Total hours row will be inserted here dynamically -->
         </tfoot>
     </table>
 </div>
@@ -112,14 +108,8 @@
                         }
                     </select>
                 </th>
-                <th>
-                    Date
-                    <input type="date" class="form-control" id="filterDate" onchange="filterData()">
-                </th>
-                <th>
-                    Hours
-                    <input type="number" class="form-control" id="filterHours" min="0" max="24" onchange="filterData()">
-                </th>
+                <th>Date</th>
+                <th>Hours</th>
             </tr>
         </thead>
         <tbody id="submittedDataBody">
@@ -150,12 +140,11 @@
             });
         }
 
-
         function generateTable() {
             // Limpar conteúdo anterior da tabela
             $('#workHoursTable thead tr').empty();
             $('#workHoursTable tbody').empty();
-            $('#workHoursTable tfoot tr').empty();
+            $('#workHoursTable tfoot').empty();
 
             // Adicionar cabeçalho WBS
             $('#workHoursTable thead tr').append('<th>WBS</th>');
@@ -175,7 +164,6 @@
             dates.forEach(date => {
                 const dateStr = date.toISOString().split('T')[0];
                 $('#workHoursTable thead tr').append(`<th>${dateStr}</th>`);
-                $('#workHoursTable tfoot tr').append(`<td class="total-hours" id="total-${dateStr}">0</td>`);
             });
 
             // Gerar linhas
@@ -185,16 +173,25 @@
                     const day = date.getDay();
                     const isWeekend = (day === 5 || day === 6);
                     const inputField = `<td><input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
-                            ${isWeekend ? 'disabled' : ''}
-                            min="0" max="24"
-                            data-date="${date.toISOString().split('T')[0]}"
-                            onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                    </td>`;
+                                    ${isWeekend ? 'disabled' : ''}
+                                    min="0" max="24"
+                                    data-date="${date.toISOString().split('T')[0]}"
+                                    onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                            </td>`;
                     row += inputField;
                 });
                 row += '</tr>';
                 $('#workHoursTable tbody').append(row);
             }
+
+            // Adicionar linha de total
+            let totalRow = '<tr><td>Total de horas trabalhadas</td>';
+            dates.forEach(date => {
+                const dateStr = date.toISOString().split('T')[0];
+                totalRow += `<td id="total-${dateStr}">0</td>`;
+            });
+            totalRow += '</tr>';
+            $('#workHoursTable tbody').append(totalRow);
         }
 
         function submitData() {
@@ -246,20 +243,6 @@
             });
         }
 
-        function filterData() {
-            const filterDate = $('#filterDate').val();
-            const filterWBS = $('#filterWBS').val();
-            const filterHours = $('#filterHours').val();
-
-            const filteredData = submittedDataArray.filter(item => {
-                return (!filterDate || item.DataRegistro === filterDate) &&
-                    (!filterWBS || item.WBSId == filterWBS) &&
-                    (!filterHours || item.HorasTrab == filterHours);
-            });
-
-            displaySubmittedData(filteredData);
-        }
-
         function updateTotals(date) {
             let totalHours = 0;
             $(`input[data-date="${date}"]`).each(function () {
@@ -277,6 +260,13 @@
                     $(this).removeClass('is-invalid');
                 });
             }
+
+            // Atualizar total de horas trabalhadas
+            let totalTrabalhadas = 0;
+            $(`#workHoursTable tbody tr`).not(':last').find(`input[data-date="${date}"]`).each(function () {
+                totalTrabalhadas += parseFloat($(this).val()) || 0;
+            });
+            $(`#total-${date}`).text(totalTrabalhadas);
         }
 
         $(document).ready(function () {
