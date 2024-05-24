@@ -1,5 +1,9 @@
 ﻿@model Myte.Models.Departamento
 
+@{
+    ViewData["Title"] = "Editar Departamento";
+}
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -8,8 +12,6 @@
         toastr.success('@TempData["message"]');
     </script>
 }
-
-
 
 <style>
     .background-image {
@@ -43,7 +45,6 @@
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">EDITAR DEPARTAMENTO</h2>
                     <hr />
-
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <form asp-action="Edit">

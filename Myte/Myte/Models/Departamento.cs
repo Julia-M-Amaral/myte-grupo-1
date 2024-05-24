@@ -11,6 +11,5 @@ namespace Myte.Models
         public string? DepartamentoNome { get; set; }
 
         public ICollection<Funcionario>? Funcionarios { get; set; }
-
     }
 }

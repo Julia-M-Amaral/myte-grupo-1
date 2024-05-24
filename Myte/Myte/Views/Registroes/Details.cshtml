@@ -1,8 +1,9 @@
 ﻿@model Myte.Models.Registro
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes Registro";
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -10,7 +11,6 @@
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
 
 <style>
@@ -49,7 +49,7 @@
                             @Html.DisplayNameFor(model => model.Funcionario)
                         </dt>
                         <dd class="col-sm-5">
-                            @Html.DisplayFor(model => model.Funcionario)
+                            @Html.DisplayFor(model => model.Funcionario.FuncionarioNome)
                         </dd>
                         <hr />
 
@@ -83,7 +83,6 @@
                     <a asp-action="Edit" asp-route-id="@Model?.RegistroId" class="btn btn-dark">Editar</a> |
                     <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
                 </div>
-
                 <br />
             </div>
         </div>

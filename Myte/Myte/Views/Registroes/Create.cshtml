@@ -1,7 +1,7 @@
 ﻿@model Myte.Models.Registro
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Horas";
 }
 @if (TempData["message"] != null)
 {
@@ -10,11 +10,10 @@
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
 
 <style>
-    .background-image {
+    .imagem-fundo {
         position: absolute;
         top: 0;
         left: 0;
@@ -25,18 +24,18 @@
         opacity: 0.7;
     }
 
-    .text-center-btn {
+    .texto-centro-btn {
         display: flex;
         justify-content: center;
         margin-top: 10px;
     }
 </style>
 
-<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+<img src="~/IMG/IMG3.png" class="imagem-fundo" alt="Imagem de Fundo">
 
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-header bg-white text-black">
                     <h2 class="card-title text-center mb-0">REGISTRO DE HORAS</h2>
@@ -51,27 +50,24 @@
                                 <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.FuncionarioId"></select><br />
                             </div>
                             <div class="form-group text-center">
-                                <label asp-for="WBSId" class="control-label"><strong>Código WBS:</strong></label><br />
-                                <select asp-for="WBSId" class="form-control" asp-items="ViewBag.WBSId"></select><br />
-                            </div>
-                            <div class="form-group text-center">
-                                <label asp-for="HorasTrab" class="control-label"><strong>Horas Trabalhadas:</strong></label><br />
-                                <input asp-for="HorasTrab" class="form-control" />
-                                <span asp-validation-for="HorasTrab" class="text-danger"></span><br />
-                            </div>
-                            <div class="form-group text-center">
                                 <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label><br />
-                                <input asp-for="DataRegistro" class="form-control" />
+                                <input asp-for="DataRegistro" class="form-control" id="dataInicio" />
+                                <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
+                            </div>
+                            <div class="form-group text-center">
+                                <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label><br />
+                                <input type="date" class="form-control" id="dataFim" />
                                 <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
                             </div>
                             <div class="form-group row text-center">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-dark">Criar</button> |
-                                    <a asp-action="Index" class="btn btn-secondary ml-2">Voltar</a>
+                                    <button type="button" class="btn btn-dark" onclick="gerarTabela()">Gerar Tabela</button>
                                 </div>
                             </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary" id="botaoRegistrar">Registrar</button>
+                            </div>
                         </form>
-                        <br/>
                     </div>
                 </div>
             </div>
@@ -79,8 +75,168 @@
     </div>
 </div>
 
+<div class="container mt-5">
+    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">Enviar Dados</button>
+    <table class="table table-bordered" id="tabelaHorasTrabalho">
+        <thead>
+            <tr>
+                <th>WBS</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+</div>
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        const arrayDadosEnviados = [];
+        let opcoesWBS = '';
+
+        function carregarOpcoesWBS(callback) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("ObterOpcoesWBS", "Registroes")',
+                success: function (dados) {
+                    opcoesWBS = '<option value="">Selecionar</option>';
+                    dados.forEach(wbs => {
+                        opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
+                    });
+                    if (callback) callback();
+                },
+                error: function (erro) {
+                    console.error('Erro ao carregar opções de WBS', erro);
+                }
+            });
+        }
+
+        function gerarTabela() {
+            $('#tabelaHorasTrabalho thead tr').empty();
+            $('#tabelaHorasTrabalho tbody').empty();
+            $('#tabelaHorasTrabalho tfoot').empty();
+
+            $('#tabelaHorasTrabalho thead tr').append('<th>WBS</th>');
+
+            const dataInicio = new Date($('#dataInicio').val());
+            const dataFim = new Date($('#dataFim').val());
+
+            const datas = [];
+            let dataAtual = dataInicio;
+            while (dataAtual <= dataFim) {
+                datas.push(new Date(dataAtual));
+                dataAtual.setDate(dataAtual.getDate() + 1);
+            }
+
+            datas.forEach(data => {
+                const dataStr = data.toISOString().split('T')[0];
+                $('#tabelaHorasTrabalho thead tr').append(`<th>${dataStr}</th>`);
+            });
+
+            // Gerar linhas
+            for (let i = 0; i < 5; i++) {
+                let linha = `<tr><td><select class="form-control tarefa-select">${opcoesWBS}</select></td>`;
+                datas.forEach(data => {
+                    const dia = data.getDay();
+                    const fimDeSemana = (dia === 5 || dia === 6);
+                    const campoEntrada = `<td><input type="number" class="form-control horas-input${fimDeSemana ? ' disabled-input' : ''}"
+                                                            ${fimDeSemana ? 'disabled' : ''}
+                                                            min="0" max="24"
+                                                            data-date="${data.toISOString().split('T')[0]}"
+                                                            onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
+                                                    </td>`;
+                    linha += campoEntrada;
+                });
+                linha += '</tr>';
+                $('#tabelaHorasTrabalho tbody').append(linha);
+            }
+
+            let linhaTotal = '<tr><td>Total de horas trabalhadas</td>';
+            datas.forEach(data => {
+                const dataStr = data.toISOString().split('T')[0];
+                linhaTotal += `<td id="total-${dataStr}">0</td>`;
+            });
+            linhaTotal += '</tr>';
+            $('#tabelaHorasTrabalho tbody').append(linhaTotal);
+        }
+
+        function enviarDados() {
+            if ($('#botaoEnviar').prop('disabled')) {
+                alert("Não é permitido lançar mais de 12 horas por dia.");
+                return;
+            }
+
+            const funcionarioId = $('#FuncionarioId').val();
+            const dadosTabela = [];
+            const datas = [];
+            $('#tabelaHorasTrabalho thead th').each(function (index) {
+                if (index > 0) datas.push($(this).text());
+            });
+
+            $('#tabelaHorasTrabalho tbody tr').each(function () {
+                const linha = $(this);
+                const wbs = linha.find('select').val();
+                if (wbs === undefined || wbs === "") {
+                    console.error("WBS não selecionado para uma das linhas.");
+                    return;
+                }
+                linha.find('input[type="number"]').each(function (index) {
+                    const horas = $(this).val();
+                    if (horas) {
+                        const data = datas[index];
+                        dadosTabela.push({ FuncionarioId: funcionarioId, WBSId: wbs, HorasTrab: horas, DataRegistro: data });
+                    }
+                });
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SalvarDados", "Registroes")',
+                data: JSON.stringify(dadosTabela),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    window.location.href = '@Url.Action("Index", "Registroes")';
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro ao enviar dados:', status, error);
+                    console.error('Resposta do servidor:', xhr.responseText);
+                }
+            });
+        }
+
+        function atualizarTotais(data) {
+            let totalHoras = 0;
+            $(`input[data-date="${data}"]`).each(function () {
+                totalHoras += parseFloat($(this).val()) || 0;
+            });
+
+            $(`#total-${data}`).text(totalHoras);
+
+            if (totalHoras > 12) {
+                $(`input[data-date="${data}"]`).each(function () {
+                    $(this).addClass('is-invalid');
+                });
+                alert("Não é permitido lançar mais de 12 horas por dia.");
+                $('#botaoRegistrar').prop('disabled', true);
+                $('#botaoEnviar').prop('disabled', true);
+            } else {
+                $(`input[data-date="${data}"]`).each(function () {
+                    $(this).removeClass('is-invalid');
+                });
+                $('#botaoRegistrar').prop('disabled', false);
+                $('#botaoEnviar').prop('disabled', false);
+            }
+
+            let totalTrabalhadas = 0;
+            $(`#tabelaHorasTrabalho tbody tr`).not(':last').find(`input[data-date="${data}"]`).each(function () {
+                totalTrabalhadas += parseFloat($(this).val()) || 0;
+            });
+            $(`#total-${data}`).text(totalTrabalhadas);
+        }
+
+        $(document).ready(function () {
+            carregarOpcoesWBS();
+        });
+    </script>
 }

@@ -54,6 +54,9 @@ namespace Myte.Controllers
         }
 
         // GET: Registroes/Create
+        [HttpGet]
+        // GET: Registroes/Create
+        [HttpGet]
         public IActionResult Create()
         {
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
@@ -62,8 +65,6 @@ namespace Myte.Controllers
         }
 
         // POST: Registroes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
@@ -72,13 +73,14 @@ namespace Myte.Controllers
             {
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
-                TempData["message"] = "REGISTRO CRIADO COM SUCESSO";
+                TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
+
 
         // GET: Registroes/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -94,13 +96,11 @@ namespace Myte.Controllers
                 return NotFound();
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSId"] = new SelectList(wbsList, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
 
-        // POST: Registroes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
@@ -120,7 +120,7 @@ namespace Myte.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RegistroExists(registro.RegistroId))
+                    if (!RegistroExiste(registro.RegistroId))
                     {
                         return NotFound();
                     }
@@ -132,9 +132,11 @@ namespace Myte.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSId"] = new SelectList(wbsList, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
+
 
         // GET: Registroes/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -172,7 +174,35 @@ namespace Myte.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RegistroExists(int id)
+        [HttpGet]
+        public async Task<IActionResult> ObterOpcoesWBS()
+        {
+            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
+            return Json(opcoesWBS);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SalvarDados([FromBody] List<Registro> registros)
+        {
+            if (registros == null || !registros.Any())
+            {
+                Console.WriteLine("Nenhum dado recebido.");
+                return BadRequest("No data received");
+            }
+
+            foreach (var registro in registros)
+            {
+                Console.WriteLine($"Recebido: FuncionarioId = {registro.FuncionarioId}, WBSId = {registro.WBSId}, HorasTrab = {registro.HorasTrab}, DataRegistro = {registro.DataRegistro}");
+                _context.Registro.Add(registro);
+            }
+            await _context.SaveChangesAsync();
+            TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
+            return Ok();
+        }
+
+
+
+        private bool RegistroExiste(int id)
         {
             return _context.Registro.Any(e => e.RegistroId == id);
         }

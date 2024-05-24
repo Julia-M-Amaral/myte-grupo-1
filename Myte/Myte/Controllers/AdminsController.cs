@@ -75,7 +75,7 @@ namespace Myte.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email");
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome");
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
             return View();
         }
@@ -94,7 +94,7 @@ namespace Myte.Controllers
                 TempData["message"] = "ADMINS CRIADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
@@ -112,7 +112,7 @@ namespace Myte.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
@@ -150,7 +150,7 @@ namespace Myte.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }

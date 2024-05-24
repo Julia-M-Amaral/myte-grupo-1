@@ -1,8 +1,9 @@
 ﻿@model Myte.Models.Departamento
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes Departamento";
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -11,7 +12,6 @@
         toastr.success('@TempData["message"]');
     </script>
 }
-
 
 <style>
     .background-image {

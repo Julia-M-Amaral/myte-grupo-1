@@ -8,12 +8,10 @@ namespace Myte.Models
 
         [Display(Name = "Funcionário:")]
         public Funcionario? Funcionario { get; set; }
-      
         public int FuncionarioId { get; set; }
 
         [Display(Name = "Código WBS")]
         public WBS? WBS { get; set; }
-
         public int WBSId { get; set; }
 
         [Display(Name = "Horas Trabalhadas:")]

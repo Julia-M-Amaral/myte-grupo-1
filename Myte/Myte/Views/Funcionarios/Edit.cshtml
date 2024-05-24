@@ -1,8 +1,9 @@
 ﻿@model Myte.Models.Funcionario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Funcionário";
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -10,41 +11,36 @@
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
 
-
-}
 <style>
-   
+
     .background-image {
         position: absolute;
         top: 0;
         left: 0;
-        z-index: -1; 
+        z-index: -1;
         width: 100%;
         height: 100%;
-        object-fit: cover; 
-        opacity: 0.7; 
+        object-fit: cover;
+        opacity: 0.7;
     }
 
-  
+
     .white-background {
         background-color: white;
-        padding: 20px; 
+        padding: 20px;
         width: fit-content;
-        margin: auto; 
+        margin: auto;
     }
 
-    
+
     .col-form-label {
-        font-weight: bold; 
+        font-weight: bold;
     }
 </style>
 
-
 <img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
-
 
 <div class="container mt-5">
     <div class="row justify-content-center">
