@@ -82,6 +82,7 @@
             <tr>
                 <th>WBS</th>
                 <!-- Date headers will be inserted here dynamically -->
+
             </tr>
         </thead>
         <tbody>
@@ -129,17 +130,20 @@
 
 @section Scripts {
     <script>
-        function loadWBSOptions() {
+        const submittedDataArray = [];
+        let wbsOptions = '';
+
+        function loadWBSOptions(callback) {
             $.ajax({
                 type: 'GET',
                 url: '@Url.Action("GetWBSOptions", "Registroes")',
                 success: function (data) {
-                    const wbsOptions = ['<option value="">None</option>']; // Inicialize a variável local como um array vazio
+                    wbsOptions = '<option value="">None</option>';
                     data.forEach(wbs => {
-                        wbsOptions.push(`<option value="${wbs.WBSId}">${wbs.Codigo}</option>`); // Adiciona as opções da WBS
+                        wbsOptions += `<option value="${wbs.wbsid}">${wbs.codigo}</option>`;
+                        console.log(wbs);
                     });
-                    // Atualize as opções no dropdown correto
-                    $('.task-select').html(wbsOptions.join('')); // Junta os elementos do array em uma string e adiciona ao dropdown
+                    if (callback) callback();
                 },
                 error: function (error) {
                     console.error('Erro ao carregar opções de WBS', error);
@@ -153,11 +157,8 @@
             $('#workHoursTable tbody').empty();
             $('#workHoursTable tfoot tr').empty();
 
-            // Adicionar cabeçalho WBS apenas na tabela
+            // Adicionar cabeçalho WBS
             $('#workHoursTable thead tr').append('<th>WBS</th>');
-
-            // Carregar opções da WBS apenas para a tabela
-            loadWBSOptions();
 
             // Obter datas de início e fim
             const startDate = new Date($('#startDate').val());
@@ -176,39 +177,26 @@
                 $('#workHoursTable thead tr').append(`<th>${dateStr}</th>`);
                 $('#workHoursTable tfoot tr').append(`<td class="total-hours" id="total-${dateStr}">0</td>`);
             });
-
+            console.log("aqui", wbsOptions);
             // Gerar linhas
             for (let i = 0; i < 5; i++) { // Gerar 5 linhas como exemplo
-                let row = '<tr><td><select class="form-control task-select"></select></td>'; // Remova wbsOptions daqui
+                let row = `<tr><td><select class="form-control task-select">${wbsOptions}</select></td>`;
                 dates.forEach(date => {
                     const day = date.getDay(); // Obter o dia da semana (0: Domingo, 1: Segunda, ..., 6: Sábado)
                     const isWeekend = (day === 0 || day === 6);
-                    let inputField;
-                    if (isWeekend) {
-                        inputField = `<td>
-                                            <input type="number" class="form-control disabled-input"
-                                                disabled
-                                                min="0" max="24"
-                                                data-date="${date.toISOString().split('T')[0]}"
-                                                onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                                            <small class="text-muted">Fim de semana</small>
-                                        </td>`;
-                    } else {
-                        inputField = `<td>
-                                            <input type="number" class="form-control hours-input"
-                                                min="0" max="24"
-                                                data-date="${date.toISOString().split('T')[0]}"
-                                                onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                                        </td>`;
-                    }
+                    const inputField = `<td>
+                                                                <input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
+                                                                       ${isWeekend ? 'disabled' : ''}
+                                                                       min="0" max="24"
+                                                                       data-date="${date.toISOString().split('T')[0]}"
+                                                                       onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                                                            </td>`;
                     row += inputField;
                 });
                 row += '</tr>';
                 $('#workHoursTable tbody').append(row);
             }
         }
-
-
 
         function submitData() {
             const funcionarioId = $('#FuncionarioId').val();
@@ -230,19 +218,20 @@
                 });
             });
 
-            // Fazer uma chamada AJAX para salvar os dados no servidor
+            console.log('Dados enviados:', tableData);
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("SaveData", "Registroes")',
                 data: JSON.stringify(tableData),
                 contentType: 'application/json; charset=utf-8',
                 success: function (response) {
-                    toastr.success('Dados enviados com sucesso');
                     submittedDataArray.push(...tableData);
                     displaySubmittedData(submittedDataArray);
                 },
-                error: function (error) {
-                    toastr.error('Erro ao enviar dados');
+                error: function (xhr, status, error) {
+                    console.error('Erro ao enviar dados:', status, error);
+                    console.error('Resposta do servidor:', xhr.responseText);
                 }
             });
         }

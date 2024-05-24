@@ -53,7 +53,6 @@ namespace Myte.Controllers
 
         // GET: Registroes/Create
         [HttpGet]
-
         public IActionResult Create()
         {
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
@@ -61,10 +60,6 @@ namespace Myte.Controllers
             ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
             return View();
         }
-
-
-
-
 
         // POST: Registroes/Create
         [HttpPost]
@@ -75,11 +70,11 @@ namespace Myte.Controllers
             {
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
-                TempData["message"] = "REGISTRO CRIADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSList"] = _context.WBS.ToList();
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
             return View(registro);
         }
 
@@ -97,7 +92,8 @@ namespace Myte.Controllers
                 return NotFound();
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSList"] = _context.WBS.ToList();
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
             return View(registro);
         }
 
@@ -133,7 +129,8 @@ namespace Myte.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSList"] = _context.WBS.ToList();
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
             return View(registro);
         }
 
@@ -174,31 +171,31 @@ namespace Myte.Controllers
         }
 
         [HttpGet]
-        [HttpGet]
         public async Task<IActionResult> GetWBSOptions()
         {
             var wbsOptions = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
             return Json(wbsOptions);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> SaveData([FromBody] List<Registro> registros)
         {
             if (registros == null || !registros.Any())
             {
+                Console.WriteLine("Nenhum dado recebido.");
                 return BadRequest("No data received");
             }
 
             foreach (var registro in registros)
             {
-                registro.DataRegistro = DateTime.Parse(registro.DataRegistro.ToString());
+                Console.WriteLine($"Recebido: FuncionarioId = {registro.FuncionarioId}, WBSId = {registro.WBSId}, HorasTrab = {registro.HorasTrab}, DataRegistro = {registro.DataRegistro}");
                 _context.Registro.Add(registro);
             }
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+
 
         private bool RegistroExists(int id)
         {
