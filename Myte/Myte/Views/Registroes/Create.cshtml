@@ -50,10 +50,6 @@
                                 <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.FuncionarioId"></select><br />
                             </div>
                             <div class="form-group text-center">
-                                <label asp-for="WBSId" class="control-label"><strong>Código WBS:</strong></label><br />
-                                <select asp-for="WBSId" class="form-control" asp-items="ViewBag.WBSList"></select><br />
-                            </div>
-                            <div class="form-group text-center">
                                 <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label><br />
                                 <input asp-for="DataRegistro" class="form-control" id="startDate" />
                                 <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
@@ -133,20 +129,17 @@
 
 @section Scripts {
     <script>
-        const submittedDataArray = [];
-        let wbsOptions = '';
-
         function loadWBSOptions() {
             $.ajax({
                 type: 'GET',
                 url: '@Url.Action("GetWBSOptions", "Registroes")',
                 success: function (data) {
-                    wbsOptions = '<option value="">None</option>';
+                    const wbsOptions = ['<option value="">None</option>']; // Inicialize a variável local como um array vazio
                     data.forEach(wbs => {
-                        wbsOptions += `<option value="${wbs.WBSId}">${wbs.Codigo}</option>`;
+                        wbsOptions.push(`<option value="${wbs.WBSId}">${wbs.Codigo}</option>`); // Adiciona as opções da WBS
                     });
-                    // Aplique essas opções no dropdown correto
-                    $('.task-select').html(wbsOptions);
+                    // Atualize as opções no dropdown correto
+                    $('.task-select').html(wbsOptions.join('')); // Junta os elementos do array em uma string e adiciona ao dropdown
                 },
                 error: function (error) {
                     console.error('Erro ao carregar opções de WBS', error);
@@ -160,8 +153,11 @@
             $('#workHoursTable tbody').empty();
             $('#workHoursTable tfoot tr').empty();
 
-            // Adicionar cabeçalho WBS
+            // Adicionar cabeçalho WBS apenas na tabela
             $('#workHoursTable thead tr').append('<th>WBS</th>');
+
+            // Carregar opções da WBS apenas para a tabela
+            loadWBSOptions();
 
             // Obter datas de início e fim
             const startDate = new Date($('#startDate').val());
@@ -183,23 +179,36 @@
 
             // Gerar linhas
             for (let i = 0; i < 5; i++) { // Gerar 5 linhas como exemplo
-                let row = `<tr><td><select class="form-control task-select">${wbsOptions}</select></td>`;
+                let row = '<tr><td><select class="form-control task-select"></select></td>'; // Remova wbsOptions daqui
                 dates.forEach(date => {
                     const day = date.getDay(); // Obter o dia da semana (0: Domingo, 1: Segunda, ..., 6: Sábado)
                     const isWeekend = (day === 0 || day === 6);
-                    const inputField = `<td>
-                                        <input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
-                                               ${isWeekend ? 'disabled' : ''}
-                                               min="0" max="24"
-                                               data-date="${date.toISOString().split('T')[0]}"
-                                               onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                                    </td>`;
+                    let inputField;
+                    if (isWeekend) {
+                        inputField = `<td>
+                                            <input type="number" class="form-control disabled-input"
+                                                disabled
+                                                min="0" max="24"
+                                                data-date="${date.toISOString().split('T')[0]}"
+                                                onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                                            <small class="text-muted">Fim de semana</small>
+                                        </td>`;
+                    } else {
+                        inputField = `<td>
+                                            <input type="number" class="form-control hours-input"
+                                                min="0" max="24"
+                                                data-date="${date.toISOString().split('T')[0]}"
+                                                onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                                        </td>`;
+                    }
                     row += inputField;
                 });
                 row += '</tr>';
                 $('#workHoursTable tbody').append(row);
             }
         }
+
+
 
         function submitData() {
             const funcionarioId = $('#FuncionarioId').val();
