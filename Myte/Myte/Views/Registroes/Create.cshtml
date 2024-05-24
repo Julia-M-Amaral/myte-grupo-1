@@ -1,16 +1,15 @@
 ﻿@model Myte.Models.Registro
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registro de Horas";
 }
 @if (TempData["message"] != null)
 {
-    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
 
 <style>
@@ -36,7 +35,7 @@
 
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-header bg-white text-black">
                     <h2 class="card-title text-center mb-0">REGISTRO DE HORAS</h2>
@@ -52,26 +51,27 @@
                             </div>
                             <div class="form-group text-center">
                                 <label asp-for="WBSId" class="control-label"><strong>Código WBS:</strong></label><br />
-                                <select asp-for="WBSId" class="form-control" asp-items="ViewBag.WBSId"></select><br />
-                            </div>
-                            <div class="form-group text-center">
-                                <label asp-for="HorasTrab" class="control-label"><strong>Horas Trabalhadas:</strong></label><br />
-                                <input asp-for="HorasTrab" class="form-control" />
-                                <span asp-validation-for="HorasTrab" class="text-danger"></span><br />
+                                <select asp-for="WBSId" class="form-control" asp-items="ViewBag.WBSList"></select><br />
                             </div>
                             <div class="form-group text-center">
                                 <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label><br />
-                                <input asp-for="DataRegistro" class="form-control" />
+                                <input asp-for="DataRegistro" class="form-control" id="startDate" />
+                                <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
+                            </div>
+                            <div class="form-group text-center">
+                                <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label><br />
+                                <input type="date" class="form-control" id="endDate" />
                                 <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
                             </div>
                             <div class="form-group row text-center">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-dark">Criar</button> |
-                                    <a asp-action="Index" class="btn btn-secondary ml-2">Voltar</a>
+                                    <button type="button" class="btn btn-dark" onclick="generateTable()">Gerar Tabela</button>
                                 </div>
                             </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
                         </form>
-                        <br/>
                     </div>
                 </div>
             </div>
@@ -79,8 +79,209 @@
     </div>
 </div>
 
+<div class="container mt-5">
+    <button class="btn btn-success mb-3" onclick="submitData()">Enviar Dados</button>
+    <table class="table table-bordered" id="workHoursTable">
+        <thead>
+            <tr>
+                <th>WBS</th>
+                <!-- Date headers will be inserted here dynamically -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows with task select and input fields for hours will be inserted here dynamically -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total Hours</td>
+                <!-- Total hours will be inserted here dynamically -->
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="container mt-5">
+    <h3>Submitted Data:</h3>
+    <table class="table table-bordered" id="submittedDataTable">
+        <thead>
+            <tr>
+                <th>
+                    WBS
+                    <select class="form-control" id="filterWBS" onchange="filterData()">
+                        <option value="">All</option>
+                        @foreach (var wbs in ViewBag.WBSList)
+                        {
+                            <option value="@wbs.Value">@wbs.Text</option>
+                        }
+                    </select>
+                </th>
+                <th>
+                    Date
+                    <input type="date" class="form-control" id="filterDate" onchange="filterData()">
+                </th>
+                <th>
+                    Hours
+                    <input type="number" class="form-control" id="filterHours" min="0" max="24" onchange="filterData()">
+                </th>
+            </tr>
+        </thead>
+        <tbody id="submittedDataBody">
+            <!-- Submitted data will be inserted here dynamically -->
+        </tbody>
+    </table>
+</div>
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        const submittedDataArray = [];
+        let wbsOptions = '';
+
+        function loadWBSOptions() {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetWBSOptions", "Registroes")',
+                success: function (data) {
+                    wbsOptions = '<option value="">None</option>';
+                    data.forEach(wbs => {
+                        wbsOptions += `<option value="${wbs.WBSId}">${wbs.Codigo}</option>`;
+                    });
+                    // Aplique essas opções no dropdown correto
+                    $('.task-select').html(wbsOptions);
+                },
+                error: function (error) {
+                    console.error('Erro ao carregar opções de WBS', error);
+                }
+            });
+        }
+
+        function generateTable() {
+            // Limpar conteúdo anterior da tabela
+            $('#workHoursTable thead tr').empty();
+            $('#workHoursTable tbody').empty();
+            $('#workHoursTable tfoot tr').empty();
+
+            // Adicionar cabeçalho WBS
+            $('#workHoursTable thead tr').append('<th>WBS</th>');
+
+            // Obter datas de início e fim
+            const startDate = new Date($('#startDate').val());
+            const endDate = new Date($('#endDate').val());
+
+            // Gerar cabeçalhos de datas
+            const dates = [];
+            let currentDate = startDate;
+            while (currentDate <= endDate) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            dates.forEach(date => {
+                const dateStr = date.toISOString().split('T')[0];
+                $('#workHoursTable thead tr').append(`<th>${dateStr}</th>`);
+                $('#workHoursTable tfoot tr').append(`<td class="total-hours" id="total-${dateStr}">0</td>`);
+            });
+
+            // Gerar linhas
+            for (let i = 0; i < 5; i++) { // Gerar 5 linhas como exemplo
+                let row = `<tr><td><select class="form-control task-select">${wbsOptions}</select></td>`;
+                dates.forEach(date => {
+                    const day = date.getDay(); // Obter o dia da semana (0: Domingo, 1: Segunda, ..., 6: Sábado)
+                    const isWeekend = (day === 0 || day === 6);
+                    const inputField = `<td>
+                                        <input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
+                                               ${isWeekend ? 'disabled' : ''}
+                                               min="0" max="24"
+                                               data-date="${date.toISOString().split('T')[0]}"
+                                               onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                                    </td>`;
+                    row += inputField;
+                });
+                row += '</tr>';
+                $('#workHoursTable tbody').append(row);
+            }
+        }
+
+        function submitData() {
+            const funcionarioId = $('#FuncionarioId').val();
+            const tableData = [];
+            const dates = [];
+            $('#workHoursTable thead th').each(function (index) {
+                if (index > 0) dates.push($(this).text());
+            });
+
+            $('#workHoursTable tbody tr').each(function () {
+                const row = $(this);
+                const wbs = row.find('select').val();
+                row.find('input[type="number"]').each(function (index) {
+                    const hours = $(this).val();
+                    if (hours) {
+                        const date = dates[index];
+                        tableData.push({ FuncionarioId: funcionarioId, WBSId: wbs, HorasTrab: hours, DataRegistro: date });
+                    }
+                });
+            });
+
+            // Fazer uma chamada AJAX para salvar os dados no servidor
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SaveData", "Registroes")',
+                data: JSON.stringify(tableData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    toastr.success('Dados enviados com sucesso');
+                    submittedDataArray.push(...tableData);
+                    displaySubmittedData(submittedDataArray);
+                },
+                error: function (error) {
+                    toastr.error('Erro ao enviar dados');
+                }
+            });
+        }
+
+        function displaySubmittedData(data) {
+            const submittedDataBody = $('#submittedDataBody');
+            submittedDataBody.empty();
+            data.forEach(item => {
+                const row = `<tr><td>${item.WBSId}</td><td>${item.DataRegistro}</td><td>${item.HorasTrab}</td></tr>`;
+                submittedDataBody.append(row);
+            });
+        }
+
+        function filterData() {
+            const filterDate = $('#filterDate').val();
+            const filterWBS = $('#filterWBS').val();
+            const filterHours = $('#filterHours').val();
+
+            const filteredData = submittedDataArray.filter(item => {
+                return (!filterDate || item.DataRegistro === filterDate) &&
+                    (!filterWBS || item.WBSId == filterWBS) &&
+                    (!filterHours || item.HorasTrab == filterHours);
+            });
+
+            displaySubmittedData(filteredData);
+        }
+
+        function updateTotals(date) {
+            let totalHours = 0;
+            $(`input[data-date="${date}"]`).each(function () {
+                totalHours += parseFloat($(this).val()) || 0;
+            });
+
+            $(`#total-${date}`).text(totalHours);
+
+            if (totalHours > 12) {
+                $(`input[data-date="${date}"]`).each(function () {
+                    $(this).addClass('is-invalid');
+                });
+            } else {
+                $(`input[data-date="${date}"]`).each(function () {
+                    $(this).removeClass('is-invalid');
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            loadWBSOptions();
+        });
+    </script>
 }

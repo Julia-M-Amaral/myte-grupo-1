@@ -52,16 +52,21 @@ namespace Myte.Controllers
         }
 
         // GET: Registroes/Create
+        [HttpGet]
+
         public IActionResult Create()
         {
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
+            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
+            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
             return View();
         }
 
+
+
+
+
         // POST: Registroes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
@@ -74,7 +79,7 @@ namespace Myte.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
+            ViewData["WBSList"] = _context.WBS.ToList();
             return View(registro);
         }
 
@@ -92,13 +97,11 @@ namespace Myte.Controllers
                 return NotFound();
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
+            ViewData["WBSList"] = _context.WBS.ToList();
             return View(registro);
         }
 
         // POST: Registroes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
@@ -130,7 +133,7 @@ namespace Myte.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
+            ViewData["WBSList"] = _context.WBS.ToList();
             return View(registro);
         }
 
@@ -168,6 +171,33 @@ namespace Myte.Controllers
             await _context.SaveChangesAsync();
             TempData["message"] = "REGISTRO DELETADO COM SUCESSO";
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> GetWBSOptions()
+        {
+            var wbsOptions = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
+            return Json(wbsOptions);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveData([FromBody] List<Registro> registros)
+        {
+            if (registros == null || !registros.Any())
+            {
+                return BadRequest("No data received");
+            }
+
+            foreach (var registro in registros)
+            {
+                registro.DataRegistro = DateTime.Parse(registro.DataRegistro.ToString());
+                _context.Registro.Add(registro);
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         private bool RegistroExists(int id)
