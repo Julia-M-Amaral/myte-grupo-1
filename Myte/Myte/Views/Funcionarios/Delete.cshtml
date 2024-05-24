@@ -2,9 +2,8 @@
 
 @{
     ViewData["Title"] = "Delete";
-
-
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -12,11 +11,7 @@
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
-
-
-
 
 <style>
     .background-image {
@@ -52,57 +47,55 @@
                     <div class="text-center mb-4">
                         <h4 class="card-subtitle">Tem certeza que deseja deletar?</h4>
                     </div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FuncionarioNome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FuncionarioNome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Senha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Senha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataContratacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataContratacao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Departamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Departamento.DepartamentoNome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NivelAcesso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NivelAcesso)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-    
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="FuncionarioId" />
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-danger">Deletar</button> |
-                            <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
-                        </div>
-                    </form>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.FuncionarioNome)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FuncionarioNome)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.DataContratacao)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.DataContratacao)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Departamento)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Departamento.DepartamentoNome)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.NivelAcesso)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.NivelAcesso)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Status)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Status)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="FuncionarioId" />
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger">Deletar</button> |
+            <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+        </div>
+    </form>
 </div>

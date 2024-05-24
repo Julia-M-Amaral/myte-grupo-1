@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -10,9 +11,7 @@
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
     </script>
-
 }
-
 
 <style>
     .background-image {

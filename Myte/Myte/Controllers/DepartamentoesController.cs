@@ -76,7 +76,7 @@ namespace Myte.Controllers
                 _context.Add(departamento);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "DEPARTAMENTO CRIADO COM SUCESSO";
-                
+
                 return RedirectToAction(nameof(Index));
             }
             else

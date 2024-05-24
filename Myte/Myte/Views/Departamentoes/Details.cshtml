@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 }
+
 @if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
@@ -11,7 +12,6 @@
         toastr.success('@TempData["message"]');
     </script>
 }
-
 
 <style>
     .background-image {

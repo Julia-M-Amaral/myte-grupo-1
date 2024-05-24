@@ -12,9 +12,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Myte.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-
-
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 navcolor">
@@ -28,14 +27,14 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         @* <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administrador</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Funcionarios" asp-action="Index">Funcionários</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Registros de Hora</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Departamentoes" asp-action="Index">Departamentos</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="WBS" asp-action="Index">WBS</a>
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administrador</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-area="" asp-controller="Funcionarios" asp-action="Index">Funcionários</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Registros de Hora</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Departamentoes" asp-action="Index">Departamentos</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="WBS" asp-action="Index">WBS</a>
 
-                            </div> *@
+                        </div> *@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             @if (User.IsInRole("Admin"))
@@ -51,7 +50,6 @@
                                 <a class="dropdown-item" asp-area="" asp-controller="Registroes" asp-action="Index">Registrar Hora</a>
 
                             </div>
-                            
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

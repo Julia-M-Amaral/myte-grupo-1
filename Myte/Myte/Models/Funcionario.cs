@@ -25,25 +25,18 @@ namespace Myte.Models
         [DataType(DataType.Date)]
         public DateTime DataContratacao { get; set; }
 
-
-
         [Display(Name = "Departamento")]
         public Departamento? Departamento { get; set; }
 
         [Display(Name = "DepartamentoId")]
         public int DepartamentoId { get; set; }
 
-
-
         [Display(Name = "Nível de Acesso")]
         public string? NivelAcesso { get; set; } = "Funcionario";
-
-
 
         [Required(ErrorMessage = "O status do funcionário é obrigatório")]
         [Display(Name = "Status")]
         public FuncionarioStatus Status { get; set; }
-
 
         public ICollection<Registro>? Registros { get; set; }
     }
