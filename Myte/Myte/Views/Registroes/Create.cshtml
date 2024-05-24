@@ -3,17 +3,17 @@
 @{
     ViewData["Title"] = "Registro de Horas";
 }
-@if (TempData["message"] != null)
+@if (TempData["mensagem"] != null)
 {
-    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jquery//dist/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.success('@TempData["message"]');
+        toastr.success('@TempData["mensagem"]');
     </script>
 }
 
 <style>
-    .background-image {
+    .imagem-fundo {
         position: absolute;
         top: 0;
         left: 0;
@@ -24,14 +24,14 @@
         opacity: 0.7;
     }
 
-    .text-center-btn {
+    .texto-centro-btn {
         display: flex;
         justify-content: center;
         margin-top: 10px;
     }
 </style>
 
-<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+<img src="~/IMG/IMG3.png" class="imagem-fundo" alt="Imagem de Fundo">
 
 <div class="container mt-2">
     <div class="row justify-content-center">
@@ -51,21 +51,21 @@
                             </div>
                             <div class="form-group text-center">
                                 <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label><br />
-                                <input asp-for="DataRegistro" class="form-control" id="startDate" />
+                                <input asp-for="DataRegistro" class="form-control" id="dataInicio" />
                                 <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
                             </div>
                             <div class="form-group text-center">
                                 <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label><br />
-                                <input type="date" class="form-control" id="endDate" />
+                                <input type="date" class="form-control" id="dataFim" />
                                 <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
                             </div>
                             <div class="form-group row text-center">
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-dark" onclick="generateTable()">Gerar Tabela</button>
+                                    <button type="button" class="btn btn-dark" onclick="gerarTabela()">Gerar Tabela</button>
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary" id="submitButton">Registrar</button>
+                                <button type="submit" class="btn btn-primary" id="botaoRegistrar">Registrar</button>
                             </div>
                         </form>
                     </div>
@@ -76,132 +76,124 @@
 </div>
 
 <div class="container mt-5">
-    <button class="btn btn-success mb-3" id="submitButton2" onclick="submitData()">Enviar Dados</button>
-    <table class="table table-bordered" id="workHoursTable">
+    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">Enviar Dados</button>
+    <table class="table table-bordered" id="tabelaHorasTrabalho">
         <thead>
             <tr>
                 <th>WBS</th>
-                <!-- Date headers will be inserted here dynamically -->
             </tr>
         </thead>
         <tbody>
-            <!-- Rows with task select and input fields for hours will be inserted here dynamically -->
         </tbody>
         <tfoot>
-            <!-- Total hours row will be inserted here dynamically -->
         </tfoot>
     </table>
 </div>
 
 @section Scripts {
     <script>
-        const submittedDataArray = [];
-        let wbsOptions = '';
+        const arrayDadosEnviados = [];
+        let opcoesWBS = '';
 
-        function loadWBSOptions(callback) {
+        function carregarOpcoesWBS(callback) {
             $.ajax({
                 type: 'GET',
-                url: '@Url.Action("GetWBSOptions", "Registroes")',
-                success: function (data) {
-                    wbsOptions = '<option value="">None</option>';
-                    data.forEach(wbs => {
-                        wbsOptions += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
+                url: '@Url.Action("ObterOpcoesWBS", "Registroes")',
+                success: function (dados) {
+                    opcoesWBS = '<option value="">Selecionar</option>';
+                    dados.forEach(wbs => {
+                        opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
                     });
                     if (callback) callback();
                 },
-                error: function (error) {
-                    console.error('Erro ao carregar opções de WBS', error);
+                error: function (erro) {
+                    console.error('Erro ao carregar opções de WBS', erro);
                 }
             });
         }
 
-        function generateTable() {
-            // Limpar conteúdo anterior da tabela
-            $('#workHoursTable thead tr').empty();
-            $('#workHoursTable tbody').empty();
-            $('#workHoursTable tfoot').empty();
+        function gerarTabela() {
+            $('#tabelaHorasTrabalho thead tr').empty();
+            $('#tabelaHorasTrabalho tbody').empty();
+            $('#tabelaHorasTrabalho tfoot').empty();
 
-            // Adicionar cabeçalho WBS
-            $('#workHoursTable thead tr').append('<th>WBS</th>');
+            $('#tabelaHorasTrabalho thead tr').append('<th>WBS</th>');
 
-            // Obter datas de início e fim
-            const startDate = new Date($('#startDate').val());
-            const endDate = new Date($('#endDate').val());
+            const dataInicio = new Date($('#dataInicio').val());
+            const dataFim = new Date($('#dataFim').val());
 
-            // Gerar cabeçalhos de datas
-            const dates = [];
-            let currentDate = startDate;
-            while (currentDate <= endDate) {
-                dates.push(new Date(currentDate));
-                currentDate.setDate(currentDate.getDate() + 1);
+            const datas = [];
+            let dataAtual = dataInicio;
+            while (dataAtual <= dataFim) {
+                datas.push(new Date(dataAtual));
+                dataAtual.setDate(dataAtual.getDate() + 1);
             }
 
-            dates.forEach(date => {
-                const dateStr = date.toISOString().split('T')[0];
-                $('#workHoursTable thead tr').append(`<th>${dateStr}</th>`);
+            datas.forEach(data => {
+                const dataStr = data.toISOString().split('T')[0];
+                $('#tabelaHorasTrabalho thead tr').append(`<th>${dataStr}</th>`);
             });
 
             // Gerar linhas
-            for (let i = 0; i < 5; i++) { // Gerar 5 linhas como exemplo
-                let row = `<tr><td><select class="form-control task-select">${wbsOptions}</select></td>`;
-                dates.forEach(date => {
-                    const day = date.getDay();
-                    const isWeekend = (day === 5 || day === 6);
-                    const inputField = `<td><input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
-                                            ${isWeekend ? 'disabled' : ''}
-                                            min="0" max="24"
-                                            data-date="${date.toISOString().split('T')[0]}"
-                                            onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                                    </td>`;
-                    row += inputField;
+            for (let i = 0; i < 5; i++) {
+                let linha = `<tr><td><select class="form-control tarefa-select">${opcoesWBS}</select></td>`;
+                datas.forEach(data => {
+                    const dia = data.getDay();
+                    const fimDeSemana = (dia === 5 || dia === 6);
+                    const campoEntrada = `<td><input type="number" class="form-control horas-input${fimDeSemana ? ' disabled-input' : ''}"
+                                                            ${fimDeSemana ? 'disabled' : ''}
+                                                            min="0" max="24"
+                                                            data-date="${data.toISOString().split('T')[0]}"
+                                                            onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
+                                                    </td>`;
+                    linha += campoEntrada;
                 });
-                row += '</tr>';
-                $('#workHoursTable tbody').append(row);
+                linha += '</tr>';
+                $('#tabelaHorasTrabalho tbody').append(linha);
             }
 
-            // Adicionar linha de total
-            let totalRow = '<tr><td>Total de horas trabalhadas</td>';
-            dates.forEach(date => {
-                const dateStr = date.toISOString().split('T')[0];
-                totalRow += `<td id="total-${dateStr}">0</td>`;
+            let linhaTotal = '<tr><td>Total de horas trabalhadas</td>';
+            datas.forEach(data => {
+                const dataStr = data.toISOString().split('T')[0];
+                linhaTotal += `<td id="total-${dataStr}">0</td>`;
             });
-            totalRow += '</tr>';
-            $('#workHoursTable tbody').append(totalRow);
+            linhaTotal += '</tr>';
+            $('#tabelaHorasTrabalho tbody').append(linhaTotal);
         }
 
-        function submitData() {
-            if ($('#submitButton2').prop('disabled')) {
+        function enviarDados() {
+            if ($('#botaoEnviar').prop('disabled')) {
                 alert("Não é permitido lançar mais de 12 horas por dia.");
                 return;
             }
 
             const funcionarioId = $('#FuncionarioId').val();
-            const tableData = [];
-            const dates = [];
-            $('#workHoursTable thead th').each(function (index) {
-                if (index > 0) dates.push($(this).text());
+            const dadosTabela = [];
+            const datas = [];
+            $('#tabelaHorasTrabalho thead th').each(function (index) {
+                if (index > 0) datas.push($(this).text());
             });
 
-            $('#workHoursTable tbody tr').each(function () {
-                const row = $(this);
-                const wbs = row.find('select').val();
+            $('#tabelaHorasTrabalho tbody tr').each(function () {
+                const linha = $(this);
+                const wbs = linha.find('select').val();
                 if (wbs === undefined || wbs === "") {
                     console.error("WBS não selecionado para uma das linhas.");
                     return;
                 }
-                row.find('input[type="number"]').each(function (index) {
-                    const hours = $(this).val();
-                    if (hours) {
-                        const date = dates[index];
-                        tableData.push({ FuncionarioId: funcionarioId, WBSId: wbs, HorasTrab: hours, DataRegistro: date });
+                linha.find('input[type="number"]').each(function (index) {
+                    const horas = $(this).val();
+                    if (horas) {
+                        const data = datas[index];
+                        dadosTabela.push({ FuncionarioId: funcionarioId, WBSId: wbs, HorasTrab: horas, DataRegistro: data });
                     }
                 });
             });
 
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("SaveData", "Registroes")',
-                data: JSON.stringify(tableData),
+                url: '@Url.Action("SalvarDados", "Registroes")',
+                data: JSON.stringify(dadosTabela),
                 contentType: 'application/json; charset=utf-8',
                 success: function (response) {
                     window.location.href = '@Url.Action("Index", "Registroes")';
@@ -213,39 +205,38 @@
             });
         }
 
-        function updateTotals(date) {
-            let totalHours = 0;
-            $(`input[data-date="${date}"]`).each(function () {
-                totalHours += parseFloat($(this).val()) || 0;
+        function atualizarTotais(data) {
+            let totalHoras = 0;
+            $(`input[data-date="${data}"]`).each(function () {
+                totalHoras += parseFloat($(this).val()) || 0;
             });
 
-            $(`#total-${date}`).text(totalHours);
+            $(`#total-${data}`).text(totalHoras);
 
-            if (totalHours > 12) {
-                $(`input[data-date="${date}"]`).each(function () {
+            if (totalHoras > 12) {
+                $(`input[data-date="${data}"]`).each(function () {
                     $(this).addClass('is-invalid');
                 });
                 alert("Não é permitido lançar mais de 12 horas por dia.");
-                $('#submitButton').prop('disabled', true);
-                $('#submitButton2').prop('disabled', true);
+                $('#botaoRegistrar').prop('disabled', true);
+                $('#botaoEnviar').prop('disabled', true);
             } else {
-                $(`input[data-date="${date}"]`).each(function () {
+                $(`input[data-date="${data}"]`).each(function () {
                     $(this).removeClass('is-invalid');
                 });
-                $('#submitButton').prop('disabled', false);
-                $('#submitButton2').prop('disabled', false);
+                $('#botaoRegistrar').prop('disabled', false);
+                $('#botaoEnviar').prop('disabled', false);
             }
 
-            // Atualizar total de horas trabalhadas
             let totalTrabalhadas = 0;
-            $(`#workHoursTable tbody tr`).not(':last').find(`input[data-date="${date}"]`).each(function () {
+            $(`#tabelaHorasTrabalho tbody tr`).not(':last').find(`input[data-date="${data}"]`).each(function () {
                 totalTrabalhadas += parseFloat($(this).val()) || 0;
             });
-            $(`#total-${date}`).text(totalTrabalhadas);
+            $(`#total-${data}`).text(totalTrabalhadas);
         }
 
         $(document).ready(function () {
-            loadWBSOptions();
+            carregarOpcoesWBS();
         });
     </script>
 }

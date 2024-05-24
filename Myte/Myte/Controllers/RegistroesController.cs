@@ -53,11 +53,12 @@ namespace Myte.Controllers
 
         // GET: Registroes/Create
         [HttpGet]
+        // GET: Registroes/Create
+        [HttpGet]
         public IActionResult Create()
         {
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
-            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
-            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
+            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
             return View();
         }
 
@@ -70,13 +71,14 @@ namespace Myte.Controllers
             {
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
-            var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
-            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
+            ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
+
 
         // GET: Registroes/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -93,11 +95,10 @@ namespace Myte.Controllers
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
-            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
+            ViewData["WBSId"] = new SelectList(wbsList, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
 
-        // POST: Registroes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
@@ -117,7 +118,7 @@ namespace Myte.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RegistroExists(registro.RegistroId))
+                    if (!RegistroExiste(registro.RegistroId))
                     {
                         return NotFound();
                     }
@@ -130,9 +131,10 @@ namespace Myte.Controllers
             }
             ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             var wbsList = _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToList();
-            ViewData["WBSList"] = new SelectList(wbsList, "WBSId", "Codigo");
+            ViewData["WBSId"] = new SelectList(wbsList, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
+
 
         // GET: Registroes/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -171,14 +173,14 @@ namespace Myte.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWBSOptions()
+        public async Task<IActionResult> ObterOpcoesWBS()
         {
-            var wbsOptions = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
-            return Json(wbsOptions);
+            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
+            return Json(opcoesWBS);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveData([FromBody] List<Registro> registros)
+        public async Task<IActionResult> SalvarDados([FromBody] List<Registro> registros)
         {
             if (registros == null || !registros.Any())
             {
@@ -192,12 +194,13 @@ namespace Myte.Controllers
                 _context.Registro.Add(registro);
             }
             await _context.SaveChangesAsync();
+            TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
             return Ok();
         }
 
 
 
-        private bool RegistroExists(int id)
+        private bool RegistroExiste(int id)
         {
             return _context.Registro.Any(e => e.RegistroId == id);
         }
