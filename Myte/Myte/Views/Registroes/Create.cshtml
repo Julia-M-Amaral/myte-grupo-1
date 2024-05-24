@@ -76,7 +76,7 @@
 </div>
 
 <div class="container mt-5">
-    <button class="btn btn-success mb-3" onclick="submitData()">Enviar Dados</button>
+    <button class="btn btn-success mb-3" id="submitButton2" onclick="submitData()">Enviar Dados</button>
     <table class="table table-bordered" id="workHoursTable">
         <thead>
             <tr>
@@ -173,11 +173,11 @@
                     const day = date.getDay();
                     const isWeekend = (day === 5 || day === 6);
                     const inputField = `<td><input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
-                                    ${isWeekend ? 'disabled' : ''}
-                                    min="0" max="24"
-                                    data-date="${date.toISOString().split('T')[0]}"
-                                    onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                            </td>`;
+                                            ${isWeekend ? 'disabled' : ''}
+                                            min="0" max="24"
+                                            data-date="${date.toISOString().split('T')[0]}"
+                                            onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                                    </td>`;
                     row += inputField;
                 });
                 row += '</tr>';
@@ -195,6 +195,11 @@
         }
 
         function submitData() {
+            if ($('#submitButton2').prop('disabled')) {
+                alert("Não é permitido lançar mais de 12 horas por dia.");
+                return;
+            }
+
             const funcionarioId = $('#FuncionarioId').val();
             const tableData = [];
             const dates = [];
@@ -257,11 +262,13 @@
                 });
                 alert("Não é permitido lançar mais de 12 horas por dia.");
                 $('#submitButton').prop('disabled', true);
+                $('#submitButton2').prop('disabled', true);
             } else {
                 $(`input[data-date="${date}"]`).each(function () {
                     $(this).removeClass('is-invalid');
                 });
                 $('#submitButton').prop('disabled', false);
+                $('#submitButton2').prop('disabled', false);
             }
 
             // Atualizar total de horas trabalhadas
