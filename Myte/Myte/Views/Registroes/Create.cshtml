@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary">Registrar</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton">Registrar</button>
                             </div>
                         </form>
                     </div>
@@ -255,10 +255,13 @@
                 $(`input[data-date="${date}"]`).each(function () {
                     $(this).addClass('is-invalid');
                 });
+                alert("Não é permitido lançar mais de 12 horas por dia.");
+                $('#submitButton').prop('disabled', true);
             } else {
                 $(`input[data-date="${date}"]`).each(function () {
                     $(this).removeClass('is-invalid');
                 });
+                $('#submitButton').prop('disabled', false);
             }
 
             // Atualizar total de horas trabalhadas
