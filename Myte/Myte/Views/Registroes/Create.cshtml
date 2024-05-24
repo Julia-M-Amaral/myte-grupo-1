@@ -140,7 +140,7 @@
                 success: function (data) {
                     wbsOptions = '<option value="">None</option>';
                     data.forEach(wbs => {
-                        wbsOptions += `<option value="${wbs.wbsid}">${wbs.codigo}</option>`;
+                        wbsOptions += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
                         console.log(wbs);
                     });
                     if (callback) callback();
@@ -150,6 +150,7 @@
                 }
             });
         }
+
 
         function generateTable() {
             // Limpar conteúdo anterior da tabela
@@ -177,20 +178,21 @@
                 $('#workHoursTable thead tr').append(`<th>${dateStr}</th>`);
                 $('#workHoursTable tfoot tr').append(`<td class="total-hours" id="total-${dateStr}">0</td>`);
             });
-            console.log("aqui", wbsOptions);
+
             // Gerar linhas
             for (let i = 0; i < 5; i++) { // Gerar 5 linhas como exemplo
                 let row = `<tr><td><select class="form-control task-select">${wbsOptions}</select></td>`;
                 dates.forEach(date => {
-                    const day = date.getDay(); // Obter o dia da semana (0: Domingo, 1: Segunda, ..., 6: Sábado)
-                    const isWeekend = (day === 0 || day === 6);
-                    const inputField = `<td>
-                                                                <input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
-                                                                       ${isWeekend ? 'disabled' : ''}
-                                                                       min="0" max="24"
-                                                                       data-date="${date.toISOString().split('T')[0]}"
-                                                                       onchange="updateTotals('${date.toISOString().split('T')[0]}')">
-                                                            </td>`;
+                    const day = date.getDay();
+                    const isWeekend = (day === 5 || day === 6);
+                    console.log(isWeekend);
+                    console.log(date);
+                    const inputField = `<td><input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
+                            ${isWeekend ? 'disabled' : ''}
+                            min="0" max="24"
+                            data-date="${date.toISOString().split('T')[0]}"
+                            onchange="updateTotals('${date.toISOString().split('T')[0]}')">
+                    </td>`;
                     row += inputField;
                 });
                 row += '</tr>';
@@ -209,6 +211,10 @@
             $('#workHoursTable tbody tr').each(function () {
                 const row = $(this);
                 const wbs = row.find('select').val();
+                if (wbs === undefined || wbs === "") {
+                    console.error("WBS não selecionado para uma das linhas.");
+                    return;
+                }
                 row.find('input[type="number"]').each(function (index) {
                     const hours = $(this).val();
                     if (hours) {
