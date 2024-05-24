@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Registro de Horas";
 }
-@if (TempData["mensagem"] != null)
+@if (TempData["message"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.success('@TempData["mensagem"]');
+        toastr.success('@TempData["message"]');
     </script>
 }
 
