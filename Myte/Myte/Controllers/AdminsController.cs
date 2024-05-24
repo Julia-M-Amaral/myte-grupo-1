@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Myte.Models;
 
 namespace Myte.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -73,7 +75,7 @@ namespace Myte.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email");
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome");
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
             return View();
         }
@@ -92,7 +94,7 @@ namespace Myte.Controllers
                 TempData["message"] = "ADMINS CRIADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
@@ -110,7 +112,7 @@ namespace Myte.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
@@ -148,7 +150,7 @@ namespace Myte.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "Email", registro.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }

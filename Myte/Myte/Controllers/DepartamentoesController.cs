@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Myte.Models;
 
 namespace Myte.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DepartamentoesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -74,7 +76,7 @@ namespace Myte.Controllers
                 _context.Add(departamento);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "DEPARTAMENTO CRIADO COM SUCESSO";
-                
+
                 return RedirectToAction(nameof(Index));
             }
             else
