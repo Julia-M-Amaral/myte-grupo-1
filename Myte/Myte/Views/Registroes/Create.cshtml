@@ -141,7 +141,6 @@
                     wbsOptions = '<option value="">None</option>';
                     data.forEach(wbs => {
                         wbsOptions += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
-                        console.log(wbs);
                     });
                     if (callback) callback();
                 },
@@ -185,8 +184,6 @@
                 dates.forEach(date => {
                     const day = date.getDay();
                     const isWeekend = (day === 5 || day === 6);
-                    console.log(isWeekend);
-                    console.log(date);
                     const inputField = `<td><input type="number" class="form-control hours-input${isWeekend ? ' disabled-input' : ''}"
                             ${isWeekend ? 'disabled' : ''}
                             min="0" max="24"
@@ -223,8 +220,6 @@
                     }
                 });
             });
-
-            console.log('Dados enviados:', tableData);
 
             $.ajax({
                 type: 'POST',
