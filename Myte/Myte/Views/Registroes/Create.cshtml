@@ -93,31 +93,6 @@
     </table>
 </div>
 
-<div class="container mt-5">
-    <h3>Submitted Data:</h3>
-    <table class="table table-bordered" id="submittedDataTable">
-        <thead>
-            <tr>
-                <th>
-                    WBS
-                    <select class="form-control" id="filterWBS" onchange="filterData()">
-                        <option value="">All</option>
-                        @foreach (var wbs in ViewBag.WBSList)
-                        {
-                            <option value="@wbs.Value">@wbs.Text</option>
-                        }
-                    </select>
-                </th>
-                <th>Date</th>
-                <th>Hours</th>
-            </tr>
-        </thead>
-        <tbody id="submittedDataBody">
-            <!-- Submitted data will be inserted here dynamically -->
-        </tbody>
-    </table>
-</div>
-
 @section Scripts {
     <script>
         const submittedDataArray = [];
@@ -229,22 +204,12 @@
                 data: JSON.stringify(tableData),
                 contentType: 'application/json; charset=utf-8',
                 success: function (response) {
-                    submittedDataArray.push(...tableData);
-                    displaySubmittedData(submittedDataArray);
+                    window.location.href = '@Url.Action("Index", "Registroes")';
                 },
                 error: function (xhr, status, error) {
                     console.error('Erro ao enviar dados:', status, error);
                     console.error('Resposta do servidor:', xhr.responseText);
                 }
-            });
-        }
-
-        function displaySubmittedData(data) {
-            const submittedDataBody = $('#submittedDataBody');
-            submittedDataBody.empty();
-            data.forEach(item => {
-                const row = `<tr><td>${item.WBSId}</td><td>${item.DataRegistro}</td><td>${item.HorasTrab}</td></tr>`;
-                submittedDataBody.append(row);
             });
         }
 
