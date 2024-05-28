@@ -1,0 +1,44 @@
+﻿@model IdentityRole
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card white-background">
+                <h5 class="card-header text-center">EXCLUIR NÍVEL DE ACESSO</h5>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">Nome:</dt>
+                        <dd class="col-sm-10">@Html.DisplayFor(model => model.Name)</dd>
+                    </dl>
+
+                    <br />
+                    <div class="row text-center">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <input type="submit" value="Deletar" class="btn btn-danger" /> |
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

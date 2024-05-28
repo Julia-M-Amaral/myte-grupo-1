@@ -1,0 +1,145 @@
+﻿@model RoleEdit
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .card-title {
+        color: #333;
+    }
+
+    .btn-dark {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+    }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .table td {
+            background-color: #fff;
+        }
+
+    .btn-secondary,
+    .btn-danger {
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+    }
+
+
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container">
+
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <form method="post">
+        <input type="hidden" name="roleName" value="@Model.Role.Name" />
+        <input type="hidden" name="roleId" value="@Model.Role.Id" />
+
+        <table class="table table-bordered table-sm" style="background-color: white;">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase">Incluir no Nível de Acesso: @Model.Role.Name</th>
+                </tr>
+                <tr>
+                    <th>USUÁRIO</th>
+                    <th>ADICIONAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.NonMembers.Count() == 0)
+                {
+                    <tr><td colspan="2">Todos os usuários pertencem a esta role</td></tr>
+                }
+                else
+                {
+                    @foreach (IdentityUser user in Model.NonMembers)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <input type="checkbox" name="AddIds" value="@user.Id">
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <table class="table table-bordered table-sm" style="background-color: white;">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center text-uppercase">Remover do Nível de Acesso: @Model.Role.Name</th>
+                </tr>
+                <tr>
+                    <th>USUÁRIO</th>
+                    <th>REMOVER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Members.Count() == 0)
+                {
+                    <tr><td colspan="2">Não existem usuários.</td></tr>
+                }
+                else
+                {
+                    @foreach (IdentityUser user in Model.Members)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <input type="checkbox" name="DeleteIds" value="@user.Id">
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="text-center mb-4">
+            <button type="submit" class="btn btn-dark">Salvar</button> |
+            <form method="get" asp-action="Index" class="text-center-btn">
+                <button type="submit" class="btn btn-secondary">Voltar</button>
+            </form>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,90 @@
+﻿@model Myte.Models.Registro
+
+@{
+    ViewData["Title"] = "Detalhes Registro";
+}
+
+@if (TempData["message"] != null)
+{
+    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["message"]');
+    </script>
+}
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-content {
+        text-align: center;
+    }
+
+    .text-center-btn {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">DETALHES DO REGISTRO</h2>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-5">
+                            @Html.DisplayNameFor(model => model.Funcionario)
+                        </dt>
+                        <dd class="col-sm-5">
+                            @Html.DisplayFor(model => model.Funcionario.FuncionarioNome)
+                        </dd>
+                        <hr />
+
+                        <dt class="col-sm-5">
+                            @Html.DisplayNameFor(model => model.WBS)
+                        </dt>
+                        <dd class="col-sm-5">
+                            @Html.DisplayFor(model => model.WBS.Codigo)
+                        </dd>
+                        <hr />
+
+                        <dt class="col-sm-5">
+                            @Html.DisplayNameFor(model => model.HorasTrab)
+                        </dt>
+                        <dd class="col-sm-5">
+                            @Html.DisplayFor(model => model.HorasTrab)
+                        </dd>
+                        <hr />
+
+                        <dt class="col-sm-5">
+                            @Html.DisplayNameFor(model => model.DataRegistro)
+                        </dt>
+                        <dd class="col-sm-5">
+                            @Html.DisplayFor(model => model.DataRegistro)
+                        </dd>
+                        <hr />
+                    </dl>
+                </div>
+
+                <div class="form-group text-center">
+                    <a asp-action="Edit" asp-route-id="@Model?.RegistroId" class="btn btn-dark">Editar</a> |
+                    <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model Myte.Models.Departamento
+
+@{
+    ViewData["Title"] = "Detalhes Departamento";
+}
+
+@if (TempData["message"] != null)
+{
+    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["message"]');
+    </script>
+}
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Detalhes do Departamento</h2>
+
+                    <div>
+                        <hr />
+                        <dl class="row">
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DepartamentoNome)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.DepartamentoNome)</dd>
+                        </dl>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <a asp-action="Edit" asp-route-id="@Model?.DepartamentoId" class="btn btn-dark">Editar</a> |
+                        <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

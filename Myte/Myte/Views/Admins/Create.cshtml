@@ -1,0 +1,96 @@
+﻿@model Myte.Models.Registro
+
+@{
+    ViewData["Title"] = "Registrar Horas";
+}
+
+<script src="/lib/jquery//dist/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+@if (TempData["message"] != null)
+{
+    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["message"]');
+    </script>
+
+}
+
+
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-white text-black">
+                    <h2 class="card-title text-center mb-0">REGISTRO</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="FuncionarioId" class="control-label">Funcionário</label>
+                            <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.FuncionarioId"></select>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label asp-for="WBSId" class="control-label">WBS</label>
+                            <select asp-for="WBSId" class="form-control" asp-items="ViewBag.WBSId"></select>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="HorasTrab" class="control-label">Horas Trabalhadas</label>
+                                    <input asp-for="HorasTrab" class="form-control" />
+                                    <span asp-validation-for="HorasTrab" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DataRegistro" class="control-label">Data de Registro</label>
+                                    <input asp-for="DataRegistro" class="form-control" />
+                                    <span asp-validation-for="DataRegistro" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group text-center-btn">
+                            <button type="submit" class="btn btn-dark">Criar</button> |
+                            <a asp-action="Index" class="btn btn-secondary ml-2">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

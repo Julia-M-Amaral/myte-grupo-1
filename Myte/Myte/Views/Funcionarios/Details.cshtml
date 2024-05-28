@@ -1,0 +1,62 @@
+﻿@model Myte.Models.Funcionario
+
+@{
+    ViewData["Title"] = "Detalhes Funcionário";
+}
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <h2 class="card-title mb-4">@ViewData["Title"]</h2>
+                    </div>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-3">Nome:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.FuncionarioNome)</dd>
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+                        <dt class="col-sm-3">Data de Contratação:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.DataContratacao)</dd>
+                        <dt class="col-sm-3">Departamento:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Departamento.DepartamentoNome)</dd>
+                        <dt class="col-sm-3">Nível de Acesso:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.NivelAcesso)</dd>
+                        <dt class="col-sm-3">Status:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Status)</dd>
+                    </dl>
+                </div>
+                <div class="text-center">
+                    <a asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

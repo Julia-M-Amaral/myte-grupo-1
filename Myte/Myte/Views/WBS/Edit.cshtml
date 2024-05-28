@@ -1,0 +1,95 @@
+﻿@model Myte.Models.WBS
+
+@{
+    ViewData["Title"] = "Editar WBS";
+}
+
+@if (TempData["message"] != null)
+{
+    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["message"]');
+    </script>
+}
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .gray-button {
+        background-color: gray;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">EDITAR WBS</h2>
+                    <hr />
+                    <br />
+                    <div class="row justify-content-center">
+                        <div class="col-md-5">
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="WBSId" />
+                                <div class="form-group">
+                                    <label asp-for="Codigo" class="control-label"><strong>Código WBS:</strong></label>
+                                    <input asp-for="Codigo" class="form-control" />
+                                    <span asp-validation-for="Codigo" class="text-danger"></span><br />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Descricao" class="control-label"><strong>Descrição:</strong></label>
+                                    <input asp-for="Descricao" class="form-control" />
+                                    <span asp-validation-for="Descricao" class="text-danger"></span><br />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Tipos" class="control-label"><strong>Tipos:</strong></label>
+                                    <input asp-for="Tipos" class="form-control" />
+                                    <span asp-validation-for="Tipos" class="text-danger"></span><br />
+                                </div>
+
+                                <div class="form-group text-center">
+                                    <input type="submit" value="Salvar" class="btn btn-dark" /> |
+                                    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

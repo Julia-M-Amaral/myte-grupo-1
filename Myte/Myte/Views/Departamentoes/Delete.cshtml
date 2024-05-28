@@ -1,0 +1,70 @@
+﻿@model Myte.Models.Departamento
+
+@{
+    ViewData["Title"] = "Apagar Departamento";
+}
+
+@if (TempData["message"] != null)
+{
+    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["message"]');
+    </script>
+}
+
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .white-background {
+        background-color: white;
+    }
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Deletar Departamento</h2>
+
+                    <div class="text-center mb-4">
+                        <h4 class="card-subtitle">Tem certeza que deseja deletar?</h4>
+                    </div>
+
+                    <hr />
+
+                    <dl class="row">
+                        <dt class="col-sm-3">Departamento:</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.DepartamentoNome)</dd>
+                    </dl>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="DepartamentoId" />
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger">Deletar</button> |
+                            <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

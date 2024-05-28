@@ -1,0 +1,52 @@
+﻿@model IEnumerable<IdentityRole>
+@{
+    ViewData["Title"] = "ROLES";
+}
+<style>
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+    }
+
+</style>
+
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center">Nível de Acesso</h2>
+            <div class="text-center">
+                <a asp-action="Create" class="btn btn-dark">CADASTRAR</a>
+            </div>
+            <br />
+
+            <table class="table table-sm table-bordered white-background text-center">
+                <tr>
+                    <th>Nome</th>
+                    <th></th>
+                </tr>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.Name</td>
+                        <td>
+                            <a class="btn btn-secondary" asp-action="Update" asp-route-id="@role.Id">Editar</a>
+                            <form asp-action="Delete" asp-route-id="@role.Id" method="get" style="display: inline;">
+                                <button type="submit" class="btn btn-danger">
+                                    Deletar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
