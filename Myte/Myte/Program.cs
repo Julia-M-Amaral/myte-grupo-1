@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 // Configure IdentityInitializer
 builder.Services.AddScoped<IdentityInitializer>();
 
-// Configuração das políticas de autorização
+// ConfiguraÃ§Ã£o das polÃ­ticas de autorizaÃ§Ã£o
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequerPerfilAdmin",
