@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace Myte.Controllers
     public class RegistroesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RegistroesController(ApplicationDbContext context)
+        public RegistroesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult AdmIndex()
@@ -55,31 +58,46 @@ namespace Myte.Controllers
 
         // GET: Registroes/Create
         [HttpGet]
-        // GET: Registroes/Create
-        [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
+            var user = await _userManager.GetUserAsync(User);
+            var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+            if (funcionario == null)
+            {
+                return NotFound("Funcionário não encontrado.");
+            }
+
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
-            return View();
+            return View(new Registro { FuncionarioId = funcionario.FuncionarioId });
         }
 
         // POST: Registroes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
+        public async Task<IActionResult> Create([Bind("RegistroId,WBSId,HorasTrab,DataRegistro")] Registro registro)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+                if (funcionario == null)
+                {
+                    return NotFound("Funcionário não encontrado.");
+                }
+
+                registro.FuncionarioId = funcionario.FuncionarioId;
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
+
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
+
 
 
         // GET: Registroes/Edit/5
