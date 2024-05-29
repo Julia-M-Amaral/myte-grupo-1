@@ -49,6 +49,7 @@
 </style>
 
 <img src="~/IMG/IMG4.png" class="imagem-fundo" alt="Imagem de Fundo">
+
 <div class="container mt-3">
     <div class="row justify-content-center">
         <div class="col-lg-4">
@@ -60,11 +61,6 @@
                 <div class="card-body">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                        <div class="form-group">
-                            <label asp-for="FuncionarioId" class="control-label"><strong>ID Funcionário:</strong></label>
-                            <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.FuncionarioId"></select>
-                        </div>
 
                         <div class="form-group">
                             <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label>
@@ -85,6 +81,10 @@
                             <div class="col-sm-6">
                                 <button type="button" class="btn btn-secondary btn-block" onclick="gerarTabela()">GERAR TABELA</button>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" id="FuncionarioId" value="@Model.FuncionarioId" />
                         </div>
                     </form>
                 </div>
@@ -162,11 +162,11 @@
                     const dia = data.getDay();
                     const fimDeSemana = (dia === 5 || dia === 6);
                     const campoEntrada = `<td><input type="number" class="form-control horas-input${fimDeSemana ? ' disabled-input' : ''}"
-                                                                                            ${fimDeSemana ? 'disabled' : ''}
-                                                                                            min="0" max="24"
-                                                                                            data-date="${data.toISOString().split('T')[0]}"
-                                                                                            onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
-                                                                                    </td>`;
+                                                                                                    ${fimDeSemana ? 'disabled' : ''}
+                                                                                                    min="0" max="24"
+                                                                                                    data-date="${data.toISOString().split('T')[0]}"
+                                                                                                    onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
+                                                                                            </td>`;
                     linha += campoEntrada;
                 });
                 linha += '</tr>';
@@ -261,4 +261,3 @@
         });
     </script>
 }
-
