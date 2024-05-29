@@ -32,8 +32,20 @@ namespace Myte.Controllers
         // GET: Registroes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Registro.Include(r => r.Funcionario).Include(r => r.WBS);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+            if (funcionario == null)
+            {
+                return NotFound("Funcionário não encontrado.");
+            }
+
+            var registros = _context.Registro
+                .Include(r => r.Funcionario)
+                .Include(r => r.WBS)
+                .Where(r => r.FuncionarioId == funcionario.FuncionarioId);
+
+            return View(await registros.ToListAsync());
         }
 
         // GET: Registroes/Details/5
