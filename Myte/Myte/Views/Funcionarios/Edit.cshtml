@@ -26,6 +26,18 @@
         opacity: 0.7;
     }
 
+    .text-center-btn {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .title-style {
+        color: black;
+        font-size: 45px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    }
 
     .white-background {
         background-color: white;
@@ -42,28 +54,29 @@
 
 <img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
 
-<div class="container mt-5">
+<div style="text-align: center;">
+    <h1 class="title-style">Editar Funcionário</h1>
+    <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-7">
+        <div class="col-lg-6">
             <div class="card">
-                <div class="card-header bg-white text-black">
-                    <h2 class="card-title text-center">EDITAR FUNCIONÁRIO</h2>
-                </div>
-                <br />
+                <div class="card-header bg-white text-black">         
+                <div class="card-body">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="FuncionarioId" />
                     <br />
                     <div class="form-group row">
-                        <label for="FuncionarioNome" class="col-sm-3 col-form-label">Nome do Funcionário:</label>
+                        <label for="FuncionarioNome" class="col-sm-4 col-form-label">Nome do Funcionário:</label>
                         <div class="col-sm-8">
                             <input asp-for="FuncionarioNome" class="form-control" />
                             <span asp-validation-for="FuncionarioNome" class="text-danger"></span>
                         </div>
                     </div>
+
                     <br />
                     <div class="form-group row">
-                        <label for="Email" class="col-sm-3 col-form-label">Email:</label>
+                        <label for="Email" class="col-sm-4 col-form-label">Email:</label>
                         <div class="col-sm-8">
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -71,7 +84,7 @@
                     </div>
                     <br />
                     <div class="form-group row">
-                        <label for="DepartamentoId" class="col-sm-3 col-form-label">Departamento:</label>
+                        <label for="DepartamentoId" class="col-sm-4 col-form-label">Departamento:</label>
                         <div class="col-sm-8">
                             <select asp-for="DepartamentoId" class="form-control" asp-items="ViewBag.DepartamentoId"></select>
                             <span asp-validation-for="DepartamentoId" class="text-danger"></span>
@@ -114,8 +127,7 @@
                         <input type="submit" value="Salvar" class="btn btn-dark" /> |
                         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </div>
-                </form>
-                <br />
+                </form>                
             </div>
         </div>
     </div>
