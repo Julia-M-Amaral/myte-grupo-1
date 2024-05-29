@@ -70,7 +70,7 @@ namespace Myte.Controllers
             {
                 var user = new IdentityUser
                 {
-                    UserName = funcionario.FuncionarioNome,
+                    UserName = funcionario.Email,
                     Email = funcionario.Email,
                     EmailConfirmed = true // Confirmação de email definida como true
                 };
