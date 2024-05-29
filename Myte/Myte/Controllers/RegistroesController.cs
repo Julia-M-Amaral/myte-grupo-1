@@ -110,8 +110,6 @@ namespace Myte.Controllers
             return View(registro);
         }
 
-
-
         // GET: Registroes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -166,7 +164,6 @@ namespace Myte.Controllers
             ViewData["WBSId"] = new SelectList(wbsList, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
-
 
         // GET: Registroes/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -229,8 +226,6 @@ namespace Myte.Controllers
             TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
             return Ok();
         }
-
-
 
         private bool RegistroExiste(int id)
         {
