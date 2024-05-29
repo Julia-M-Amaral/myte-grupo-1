@@ -5,7 +5,7 @@
 }
 @if (TempData["message"] != null)
 {
-    <script src="/lib/jquery//dist/jquery.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         toastr.success('@TempData["message"]');
@@ -29,52 +29,72 @@
         justify-content: center;
         margin-top: 10px;
     }
+
+    .tabela-wbs {
+        background-color: white;
+    }
+
+    .disabled-input {
+        background-color: #f8f9fa;
+    }
+
+    #tabelaHorasTrabalho thead th {
+        background-color: black;
+        color: white;
+    }
+
+    #tabelaHorasTrabalho tbody td, #tabelaHorasTrabalho tbody th {
+        text-align: center;
+    }
 </style>
 
-<img src="~/IMG/IMG3.png" class="imagem-fundo" alt="Imagem de Fundo">
+<img src="~/IMG/IMG4.png" class="imagem-fundo" alt="Imagem de Fundo">
 
-<div class="container mt-2">
+<div class="container mt-3">
     <div class="row justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-white text-black">
+                <div class="card-header bg-dark text-white">
                     <h2 class="card-title text-center mb-0">REGISTRO DE HORAS</h2>
                 </div>
-                <hr />
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <form asp-action="Create">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group text-center">
-                                <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label><br />
-                                <input asp-for="DataRegistro" class="form-control" id="dataInicio" />
-                                <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
+
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label>
+                            <input asp-for="DataRegistro" class="form-control" id="dataInicio" />
+                            <span asp-validation-for="DataRegistro" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label>
+                            <input type="date" class="form-control" id="dataFim" />
+                            <span asp-validation-for="DataRegistro" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class=" text-center form-group row">
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-dark btn-block" id="botaoRegistrar">REGISTRAR</button>
                             </div>
-                            <div class="form-group text-center">
-                                <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label><br />
-                                <input type="date" class="form-control" id="dataFim" />
-                                <span asp-validation-for="DataRegistro" class="text-danger"></span><br />
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-secondary btn-block" onclick="gerarTabela()">GERAR TABELA</button>
                             </div>
-                            <div class="form-group row text-center">
-                                <div class="col-sm-12">
-                                    <button type="button" class="btn btn-dark" onclick="gerarTabela()">Gerar Tabela</button>
-                                </div>
-                            </div>
-                            <div class="form-group text-center">
-                                <input type="hidden" id="FuncionarioId" value="@Model.FuncionarioId" />
-                                <button type="submit" class="btn btn-primary" id="botaoRegistrar">Registrar</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" id="FuncionarioId" value="@Model.FuncionarioId" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container mt-5">
-    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">Enviar Dados</button>
-    <table class="table table-bordered" id="tabelaHorasTrabalho">
+<div class="container mt-3">
+    <table class="table table-bordered tabela-wbs" id="tabelaHorasTrabalho">
         <thead>
             <tr>
                 <th>WBS</th>
@@ -85,6 +105,11 @@
         <tfoot>
         </tfoot>
     </table>
+</div>
+
+<div class="container mt-3 text-center">
+    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">SUBMETER</button>
+    <a asp-action="Index" class="btn btn-secondary mb-3">Voltar</a>
 </div>
 
 @section Scripts {
@@ -131,25 +156,24 @@
                 $('#tabelaHorasTrabalho thead tr').append(`<th>${dataStr}</th>`);
             });
 
-            // Gerar linhas
             for (let i = 0; i < 5; i++) {
                 let linha = `<tr><td><select class="form-control tarefa-select">${opcoesWBS}</select></td>`;
                 datas.forEach(data => {
                     const dia = data.getDay();
                     const fimDeSemana = (dia === 5 || dia === 6);
                     const campoEntrada = `<td><input type="number" class="form-control horas-input${fimDeSemana ? ' disabled-input' : ''}"
-                                        ${fimDeSemana ? 'disabled' : ''}
-                                        min="0" max="24"
-                                        data-date="${data.toISOString().split('T')[0]}"
-                                        onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
-                                    </td>`;
+                                                                                                    ${fimDeSemana ? 'disabled' : ''}
+                                                                                                    min="0" max="24"
+                                                                                                    data-date="${data.toISOString().split('T')[0]}"
+                                                                                                    onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
+                                                                                            </td>`;
                     linha += campoEntrada;
                 });
                 linha += '</tr>';
                 $('#tabelaHorasTrabalho tbody').append(linha);
             }
 
-            let linhaTotal = '<tr><td>Total de horas trabalhadas</td>';
+            let linhaTotal = '<tr><td>TOTAL DE HORAS:</td>';
             datas.forEach(data => {
                 const dataStr = data.toISOString().split('T')[0];
                 linhaTotal += `<td id="total-${dataStr}">0</td>`;
