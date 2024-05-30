@@ -165,6 +165,7 @@ namespace Myte.Controllers
             return View(registro);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Registroes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -185,6 +186,7 @@ namespace Myte.Controllers
             return View(registro);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Registroes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
