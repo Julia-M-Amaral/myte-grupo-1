@@ -11,33 +11,40 @@
 
 
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 navcolor">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3 navcolor">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="Admin" asp-controller="Admin" asp-action="Index">Avanadita</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Administrador</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Funcionarios" asp-action="Index">Funcionários</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Registros de Hora</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Departamentoes" asp-action="Index">Departamentos</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="WBS" asp-action="Index">WBS</a>
-
                             </div>
-                        <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRoles" asp-action="Index">Gerenciar Rotas</a>
-                        <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminUsers" asp-action="Index">Gerenciar Usuários</a>
-
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Funcionarios" asp-action="Index">Funcionários</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Departamentoes" asp-action="Index">Departamentos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="WBS" asp-action="Index">WBS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="AdminRoles" asp-action="Index">Gerenciar Rotas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="AdminUsers" asp-action="Index">Gerenciar Usuários</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
-                   
                 </div>
             </div>
         </nav>
@@ -47,7 +54,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="footer text-muted">
         <div class="container">
             &copy; 2024 - Avanadita - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
