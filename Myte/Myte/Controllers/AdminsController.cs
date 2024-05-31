@@ -38,7 +38,7 @@ namespace Myte.Controllers
                 registros = registros.Where(r => r.WBS.Codigo.Contains(searchWBS));
             }
 
-            // Filtra por período de registro
+            // Filtra por dats
             if (dataInicio.HasValue && dataFim.HasValue)
             {
                 registros = registros.Where(r =>
