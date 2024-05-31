@@ -40,3 +40,9 @@ html {
         transform: translateY(-30px);
     }
 }
+/* Estilize o botão "Lista Completa */
+.button-container {
+    float: right; 
+    margin-bottom: 10px;
+}
+
