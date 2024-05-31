@@ -21,21 +21,24 @@ namespace Myte.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string searchString, DateTime? dataInicio, DateTime? dataFim)
+        public IActionResult Index(string searchFuncionario, string searchWBS, DateTime? dataInicio, DateTime? dataFim)
         {
             var registros = _context.Registro
                 .Include(r => r.Funcionario)
                 .Include(r => r.WBS)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchFuncionario))
             {
-                registros = registros.Where(r =>
-                    r.Funcionario.FuncionarioNome.Contains(searchString) ||
-                    r.WBS.Codigo.Contains(searchString));
+                registros = registros.Where(r => r.Funcionario.FuncionarioNome.Contains(searchFuncionario));
             }
 
-            // Filtra por período de registro (se as datas forem fornecidas)
+            if (!string.IsNullOrEmpty(searchWBS))
+            {
+                registros = registros.Where(r => r.WBS.Codigo.Contains(searchWBS));
+            }
+
+            // Filtra por período de registro
             if (dataInicio.HasValue && dataFim.HasValue)
             {
                 registros = registros.Where(r =>
@@ -44,6 +47,7 @@ namespace Myte.Controllers
 
             return View(registros.ToList());
         }
+
 
         // GET: Admins
         //public async Task<IActionResult> Index()
