@@ -31,71 +31,85 @@
         margin-top: 20px;
     }
 
+    .title-style {
+        color: black;
+        font-size: 45px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .col-form-label {
+        font-weight: bold;
+    }
+
     .white-background {
         background-color: white;
     }
 </style>
 
 <img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
-<div class="container mt-5">
+<div style="text-align: center;">
+    <h1 class="title-style">Deletar Funcionário</h1>
+
+    <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Deletar Funcionário</h2>
-
-                    <div class="text-center mb-4">
-                        <h4 class="card-subtitle">Tem certeza que deseja deletar?</h4>
-                    </div>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-2">
+                    <dl class="row text-center">
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.FuncionarioNome)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.FuncionarioNome)
                         </dd>
-                        <dt class="col-sm-2">
+
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.Email)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Email)
                         </dd>
-                        <dt class="col-sm-2">
+
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.DataContratacao)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.DataContratacao)
                         </dd>
-                        <dt class="col-sm-2">
+
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.Departamento)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Departamento.DepartamentoNome)
                         </dd>
-                        <dt class="col-sm-2">
+
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.NivelAcesso)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.NivelAcesso)
                         </dd>
-                        <dt class="col-sm-2">
+
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.Status)
                         </dt>
-                        <dd class="col-sm-10">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Status)
                         </dd>
                     </dl>
-                </div>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="FuncionarioId" />
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Deletar</button> |
+                        <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="FuncionarioId" />
-        <div class="text-center">
-            <button type="submit" class="btn btn-danger">Deletar</button> |
-            <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
-        </div>
-    </form>
+
 </div>
