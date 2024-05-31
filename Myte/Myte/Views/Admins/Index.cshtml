@@ -53,30 +53,34 @@
 </div>
 <br />
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Index" method="get">
-            <div class="input-group mb-3" style="width: 150%;">
-                <input type="text" class="form-control" name="searchString" placeholder="Buscar funcionário ou WBS...">
-                <div class="input-group-append">
-                    <button class="btn btn-secondary" type="submit">Buscar</button>
-                    <a asp-action="Index" class="btn btn-secondary">Lista Completa</a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Data Inicial</label>
-                    <input type="date" class="form-control" name="dataInicio" placeholder="Data de Início">
-                    <label>Data Final</label>
-                    <input type="date" class="form-control" name="dataFim" placeholder="Data de Término">
-                </div>
-            </div>
-            <br />
-        </form>
+<form asp-action="Index" method="get">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5">
+            <input type="text" class="form-control" name="searchString" placeholder="Buscar funcionário...">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" name="searchString" placeholder="Buscar WBS...">
+        </div>
+        <div class="col-md-2">
+            <input type="date" class="form-control" name="dataInicio" placeholder="dd/mm/aa">
+        </div>
+        <div class="col-md-2">
+            <input type="date" class="form-control" name="dataFim" placeholder="dd/mm/aa">
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <button class="btn btn-secondary w-100" type="submit">Buscar</button>
+        </div>
     </div>
 </div>
+</form>
 
+<br />
+
+<strong>Total de Horas = @Model.Sum(obj => obj.HorasTrab).ToString()</strong>
+<div class="button-container">
+    <a asp-action="Index" class="btn btn-secondary">Lista Completa</a>
+</div>
 <table class="table white-background">
     <thead>
         <tr>
@@ -121,4 +125,3 @@
     </tbody>
 </table>
 
-<strong>Total de Horas = @Model.Sum(obj => obj.HorasTrab).ToString()</strong>
