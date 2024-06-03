@@ -33,11 +33,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequerPerfilAdmin",
         policy => policy.RequireRole("Admin"));
     options.AddPolicy("RequerPerfilFuncOuAdmin",
-        policy => policy.RequireRole("Func"));
+        policy => policy.RequireRole("Funcionario"));
 
     options.AddPolicy("RequerFuncOuAdmin", policy =>
         policy.RequireAssertion(context =>
-            context.User.IsInRole("Admin") || context.User.IsInRole("Func")
+            context.User.IsInRole("Admin") || context.User.IsInRole("Funcionario")
         ));
 
     //options.AddPolicy("RequerFuncOuAdmin", policy =>
