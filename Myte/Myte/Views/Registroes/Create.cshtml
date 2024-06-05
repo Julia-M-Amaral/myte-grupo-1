@@ -108,7 +108,6 @@
     <table class="table table-bordered tabela-wbs" id="tabelaHorasTrabalho">
         <thead>
             <tr>
-                <th>WBS</th>
             </tr>
         </thead>
         <tbody>
@@ -135,7 +134,7 @@
                 success: function (dados) {
                     opcoesWBS = '<option value="">Selecionar</option>';
                     dados.forEach(wbs => {
-                        opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
+                            opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo} - ${wbs.descricao}</option>`;
                     });
                     if (callback) callback();
                 },
