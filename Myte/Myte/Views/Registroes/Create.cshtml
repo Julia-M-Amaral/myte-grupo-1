@@ -135,7 +135,7 @@
                 success: function (dados) {
                     opcoesWBS = '<option value="">Selecionar</option>';
                     dados.forEach(wbs => {
-                        opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
+                            opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo} - ${wbs.descricao} (${wbs.tipos})</option>`;
                     });
                     if (callback) callback();
                 },

@@ -206,7 +206,9 @@ namespace Myte.Controllers
         [HttpGet]
         public async Task<IActionResult> ObterOpcoesWBS()
         {
-            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
+            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo, w.Tipos, w.Descricao }).ToListAsync();
+
+
             return Json(opcoesWBS);
         }
 
