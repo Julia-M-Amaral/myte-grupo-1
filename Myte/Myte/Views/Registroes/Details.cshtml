@@ -42,8 +42,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">DETALHES DO REGISTRO</h2>
-                    <hr />
+                    <h2 class="card-title text-center mb-4">DETALHES DO REGISTRO</h2>                    
                     <dl class="row">
                         <dt class="col-sm-5">
                             @Html.DisplayNameFor(model => model.Funcionario)
@@ -51,34 +50,26 @@
                         <dd class="col-sm-5">
                             @Html.DisplayFor(model => model.Funcionario.FuncionarioNome)
                         </dd>
-                        <hr />
-
                         <dt class="col-sm-5">
                             @Html.DisplayNameFor(model => model.WBS)
                         </dt>
                         <dd class="col-sm-5">
                             @Html.DisplayFor(model => model.WBS.Codigo)
                         </dd>
-                        <hr />
-
                         <dt class="col-sm-5">
                             @Html.DisplayNameFor(model => model.HorasTrab)
                         </dt>
                         <dd class="col-sm-5">
                             @Html.DisplayFor(model => model.HorasTrab)
                         </dd>
-                        <hr />
-
                         <dt class="col-sm-5">
                             @Html.DisplayNameFor(model => model.DataRegistro)
                         </dt>
                         <dd class="col-sm-5">
                             @Html.DisplayFor(model => model.DataRegistro)
                         </dd>
-                        <hr />
                     </dl>
                 </div>
-
                 <div class="form-group text-center">
                     <a asp-action="Edit" asp-route-id="@Model?.RegistroId" class="btn btn-dark">Editar</a> |
                     <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
