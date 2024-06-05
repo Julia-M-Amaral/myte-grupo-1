@@ -1,4 +1,5 @@
 ﻿using Myte.Data;
+using Myte.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Myte.Models
@@ -17,8 +18,9 @@ namespace Myte.Models
         [Display(Name = "Descrição")]
         public string? Descricao { get; set; }
 
-        [Required]
-        public string? Tipos { get; set; }
+        [Required(ErrorMessage = "O Tipo é obrigatório!")]
+        [Display(Name = "Tipo")] 
+        public TiposWBS Tipos { get; set; }
 
         public ICollection<Registro>? Registros { get; set; }
     }
