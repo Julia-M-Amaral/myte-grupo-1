@@ -2,29 +2,136 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Avanadita";
 }
+@{
+    ViewData["Title"] = "Avanadita";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 <style>
-    .background-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
+
+    #banner {
+        background: rgb(255,215,0);
+        background: linear-gradient(90deg, rgba(255,215,0,1) 0%, rgba(255,215,0,1) 35%, rgba(255,88,0,1) 100%);
+        color: #000;
+        padding-top: 10%;
+    }
+
+    .promo-title {
+        font-size: 40px;
+        font-weight: 600;
+        margin-top: 100px;
+    }
+
+    .bottom-img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.6;
     }
 
-    .text-center-btn {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
+    .img-banner {
+        width: 20vw;
+        flex-shrink: 0;
+        border-radius: 368px;
+        box-shadow: 2px 2px 15px #ff5800;
+        position: relative;
+        animation: flutuar 2s ease-in-out infinite alternate;
     }
 
-    .white-background {
-        background-color: white;
+    .form-titulo, .promo-title, h4 {
+        background: linear-gradient(90deg, rgba(255,88,0,1) 0%, rgba(137,0,120,1) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .formcontato {
+        background: rgb(255,215,0);
+        background: linear-gradient(90deg, rgba(255,215,0,1) 0%, rgba(255,215,0,1) 35%, rgba(255,88,0,1) 100%);
+        color: #000;
+    }
+
+    .carousel {
+        background: rgb(255,215,0);
+        background: linear-gradient(90deg, rgba(255,215,0,1) 0%, rgba(255,215,0,1) 35%, rgba(255,88,0,1) 100%);
+        color: #000;
     }
 </style>
+<html class="container-fluid">
 
-<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+<body>
+
+    <section id="banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="promo-title">Bem vindo, Administrador!</p>
+                    <p>O lançamento de horas de maneira correta e antecipada é vital para acompanharmos a saúde financeira da Avanadita. Caso tenham qualquer dúvida entre em contato conosco.</p>
+
+                </div>
+                <div class="col-md-6 text-center">
+                    <img class="img-banner" src="./IMG/IMG8.png" class="img-fluid" />
+
+                </div>
+            </div>
+        </div>
+        <img src="./IMG/wave1.png" class="bottom-img" />
+    </section>
+    @*  CAROUSEL *@
+    <section class="carousel">
+
+
+        <div id="carouselExampleFade" class="carousel slide carousel-fade">
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="./IMG/IMG10.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="./IMG/IMG13.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="./IMG/IMG12.jpeg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </section>
+    <section class="formcontato">
+        <img src="./IMG/wave2.png" class="bottom-img" />
+
+        <h1 class="form-titulo text-center p-3">Fazer o que importa começa aqui!</h1>
+        <div class="d-flex  justify-content-center align-items-center vh-100">
+
+            <div class="col-md-6 text-center mx-5">
+
+
+                <img src="./IMG/Woman Sitting 01.png" class="img-fluid w-50 h-50" />
+            </div>
+            <div class="container py-4" id="contactForm" style="max-width: 50%;">
+
+                <div>
+                    <h4 class="mb-3 text-center">Qual é o caminho da sua paixão?</h4> <br /><br />
+                    <p class="text-white fs-5 p-3">
+                        Na Avanadita, não vemos o trabalho como simplesmente uma obrigação. Aqui, cada colaborador descobre que o que faz é mais do que um emprego - é uma jornada de inovação e descoberta. Acreditamos que a verdadeira excelência emerge quando a imaginação se une à ação. Todos os dias, nossos talentos desbravam novos horizontes, abraçam desafios audaciosos, enfrentam falhas com coragem e alcançam sucesso em territórios inexplorados.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
+

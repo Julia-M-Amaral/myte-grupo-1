@@ -60,11 +60,11 @@ namespace Myte.Data
 
         public async Task SeedFuncAsync()
         {
-            if (!await _roleManager.RoleExistsAsync("Func"))
+            if (!await _roleManager.RoleExistsAsync("Funcionario"))
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "Func";
-                role.NormalizedName = "Func";
+                role.Name = "Funcionario";
+                role.NormalizedName = "Funcionario";
                 role.ConcurrencyStamp = Guid.NewGuid().ToString();
 
                 IdentityResult roleResult = await _roleManager.CreateAsync(role);
@@ -85,7 +85,7 @@ namespace Myte.Data
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Func");
+                    await _userManager.AddToRoleAsync(user, "Funcionario");
                 }
             }
 

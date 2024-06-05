@@ -17,6 +17,9 @@
   <ItemGroup>
     <Content Remove="Areas\Admin\Views\Shared\_LoginAdmin.cshtml" />
     <Content Remove="Views\WBS\MessageSuccess.cshtml" />
+    <Content Remove="wwwroot\IMG\IMG10.png" />
+    <Content Remove="wwwroot\IMG\IMG11.png" />
+    <Content Remove="wwwroot\IMG\IMG9.png" />
   </ItemGroup>
 
   <ItemGroup>

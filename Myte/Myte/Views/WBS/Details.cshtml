@@ -42,6 +42,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
+            
                     <h2 class="card-title text-center mb-4">DETALHES WBS</h2>
                     <dl class="row">
                         <dt class="col-sm-2">
@@ -64,16 +65,17 @@
                         </dd>
                     </dl>
                 </div>
+                <div class="form-group text-center">
+                    <a asp-action="Edit" asp-route-id="@Model?.WBSId" class="btn btn-dark">Editar</a> |
+                    <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
+                </div>
+                <br />
             </div>
         </div>
     </div>
 </div>
 
-<div class="form-group text-center">
-    <a asp-action="Edit" asp-route-id="@Model?.WBSId" class="btn btn-dark">Editar</a> |
-    <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
-</div>
-<br />
+
 
 
 

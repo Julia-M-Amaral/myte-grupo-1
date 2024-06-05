@@ -113,7 +113,7 @@ public class AdminRolesController : Controller
         IdentityRole role = await roleManager.FindByIdAsync(id);
         if (role == null)
         {
-            ModelState.AddModelError("", "Role não encontrada");
+            ModelState.AddModelError("", "Nível de acesso não encontrado");
             return View("Index", roleManager.Roles);
         }
         return View(role);
@@ -139,7 +139,7 @@ public class AdminRolesController : Controller
         }
         else
         {
-            ModelState.AddModelError("", "Role não encontrada");
+            ModelState.AddModelError("", "Nível de acesso  não encontrado");
         }
         return View("Index", roleManager.Roles);
     }
