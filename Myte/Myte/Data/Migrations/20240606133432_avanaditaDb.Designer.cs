@@ -12,8 +12,8 @@ using Myte.Data;
 namespace Myte.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240604182821_AzureMigration")]
-    partial class AzureMigration
+    [Migration("20240606133432_avanaditaDb")]
+    partial class avanaditaDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

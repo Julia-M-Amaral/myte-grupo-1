@@ -5,7 +5,7 @@
 namespace Myte.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AzureMigration : Migration
+    public partial class avanaditaDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
