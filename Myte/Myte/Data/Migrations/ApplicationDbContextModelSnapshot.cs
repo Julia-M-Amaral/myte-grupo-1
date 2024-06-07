@@ -326,9 +326,8 @@ namespace Myte.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tipos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Tipos")
+                        .HasColumnType("int");
 
                     b.HasKey("WBSId");
 

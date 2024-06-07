@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,12 @@ namespace Myte.Controllers
     public class FuncionariosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager; 
 
-        public FuncionariosController(ApplicationDbContext context)
+        public FuncionariosController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Funcionarios
@@ -65,16 +68,36 @@ namespace Myte.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(funcionario);
-                await _context.SaveChangesAsync();
-                TempData["message"] = "FUNCIONARIO CRIADO COM SUCESSO";
+                var user = new IdentityUser
+                {
+                    UserName = funcionario.Email,
+                    Email = funcionario.Email,
+                    EmailConfirmed = true // Confirmação de email definida como true
+                };
 
-                return RedirectToAction(nameof(Index));
+                var result = await _userManager.CreateAsync(user, funcionario.Senha);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, funcionario.NivelAcesso ?? "Funcionario");
+                    _context.Add(funcionario);
+                    await _context.SaveChangesAsync();
+
+                    TempData["message"] = "FUNCIONÁRIO CRIADO COM SUCESSO";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             ViewData["DepartamentoId"] = new SelectList(_context.Set<Departamento>(), "DepartamentoId", "DepartamentoNome", funcionario.DepartamentoId);
             ViewData["Status"] = new SelectList(Enum.GetValues(typeof(FuncionarioStatus)).Cast<FuncionarioStatus>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text", funcionario.Status);
             return View(funcionario);
         }
+
+
 
         // GET: Funcionarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -112,7 +135,7 @@ namespace Myte.Controllers
                 {
                     _context.Update(funcionario);
                     await _context.SaveChangesAsync();
-                    TempData["message"] = "FUNCIONARIO EDITADO COM SUCESSO";
+                    TempData["message"] = "FUNCIONÁRIO EDITADO COM SUCESSO";
 
                 }
                 catch (DbUpdateConcurrencyException)
@@ -164,7 +187,7 @@ namespace Myte.Controllers
             }
 
             await _context.SaveChangesAsync();
-            TempData["message"] = "FUNCIONARIO DELETADO COM SUCESSO";
+            TempData["message"] = "FUNCIONÁRIO DELETADO COM SUCESSO";
 
             return RedirectToAction(nameof(Index));
         }

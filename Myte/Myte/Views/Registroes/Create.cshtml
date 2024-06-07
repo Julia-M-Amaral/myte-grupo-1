@@ -13,7 +13,7 @@
 }
 
 <style>
-    .imagem-fundo {
+    .background-image {
         position: absolute;
         top: 0;
         left: 0;
@@ -21,7 +21,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        opacity: 0.7;
+        opacity: 0.5;
     }
 
     .texto-centro-btn {
@@ -31,6 +31,9 @@
     }
 
     .tabela-wbs {
+        background-image: url('~/IMG/IMG3.png');
+        background-size: cover;
+        background-position: center;
         background-color: white;
     }
 
@@ -39,52 +42,59 @@
     }
 
     #tabelaHorasTrabalho thead th {
-        background-color: black;
-        color: white;
+        background-color: white;
+        color: black;
     }
 
     #tabelaHorasTrabalho tbody td, #tabelaHorasTrabalho tbody th {
         text-align: center;
     }
+
+    .title-style {
+        color: black;
+        font-size: 45px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .total-horas {
+        background-color: white;
+    }
+
 </style>
 
-<img src="~/IMG/IMG4.png" class="imagem-fundo" alt="Imagem de Fundo">
+<img src="~/IMG/IMG3.png" class="background-image" alt="Background Image">
+
+<div style="text-align: center;">
+    <h1 class="title-style">Registro de Horas</h1>
 <div class="container mt-3">
     <div class="row justify-content-center">
         <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h2 class="card-title text-center mb-0">REGISTRO DE HORAS</h2>
-                </div>
-
+            <div class="card">          
                 <div class="card-body">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group">
-                            <label asp-for="FuncionarioId" class="control-label"><strong>ID Funcionário:</strong></label>
-                            <select asp-for="FuncionarioId" class="form-control" asp-items="ViewBag.FuncionarioId"></select>
-                        </div>
-
-                        <div class="form-group">
                             <label asp-for="DataRegistro" class="control-label"><strong>Data Registro:</strong></label>
-                            <input asp-for="DataRegistro" class="form-control" id="dataInicio" />
+                            <input type="date" class="form-control" id="dataInicio" />
                             <span asp-validation-for="DataRegistro" class="text-danger"></span>
                         </div>
-
+                        <br />
                         <div class="form-group">
                             <label asp-for="DataRegistro" class="control-label"><strong>Data Final:</strong></label>
                             <input type="date" class="form-control" id="dataFim" />
                             <span asp-validation-for="DataRegistro" class="text-danger"></span>
                         </div>
                         <br />
-                        <div class=" text-center form-group row">
-                            <div class="col-sm-6">
-                                <button type="submit" class="btn btn-dark btn-block" id="botaoRegistrar">REGISTRAR</button>
+                        <th colspan="2">
+                            <div class=" text-center">
+                                <button type="button" class="btn btn-dark" onclick="gerarTabela()">Gerar Tabela</button>
                             </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-secondary btn-block" onclick="gerarTabela()">GERAR TABELA</button>
-                            </div>
+                        </th>
+
+                        <div class="form-group">
+                            <input type="hidden" id="FuncionarioId" value="@Model.FuncionarioId" />
                         </div>
                     </form>
                 </div>
@@ -97,7 +107,6 @@
     <table class="table table-bordered tabela-wbs" id="tabelaHorasTrabalho">
         <thead>
             <tr>
-                <th>WBS</th>
             </tr>
         </thead>
         <tbody>
@@ -108,7 +117,7 @@
 </div>
 
 <div class="container mt-3 text-center">
-    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">SUBMETER</button>
+    <button class="btn btn-success mb-3" id="botaoEnviar" onclick="enviarDados()">Enviar</button>
     <a asp-action="Index" class="btn btn-secondary mb-3">Voltar</a>
 </div>
 
@@ -124,7 +133,7 @@
                 success: function (dados) {
                     opcoesWBS = '<option value="">Selecionar</option>';
                     dados.forEach(wbs => {
-                        opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo}</option>`;
+                            opcoesWBS += `<option value="${wbs.wbsId}">${wbs.codigo} - ${wbs.descricao}</option>`;
                     });
                     if (callback) callback();
                 },
@@ -162,18 +171,18 @@
                     const dia = data.getDay();
                     const fimDeSemana = (dia === 5 || dia === 6);
                     const campoEntrada = `<td><input type="number" class="form-control horas-input${fimDeSemana ? ' disabled-input' : ''}"
-                                                                                            ${fimDeSemana ? 'disabled' : ''}
-                                                                                            min="0" max="24"
-                                                                                            data-date="${data.toISOString().split('T')[0]}"
-                                                                                            onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
-                                                                                    </td>`;
+                                                                                                                            ${fimDeSemana ? 'disabled' : ''}
+                                                                                                                            min="0" max="24"
+                                                                                                                            data-date="${data.toISOString().split('T')[0]}"
+                                                                                                                            onchange="atualizarTotais('${data.toISOString().split('T')[0]}')">
+                                                                                                                    </td>`;
                     linha += campoEntrada;
                 });
                 linha += '</tr>';
                 $('#tabelaHorasTrabalho tbody').append(linha);
             }
 
-            let linhaTotal = '<tr><td>TOTAL DE HORAS:</td>';
+            let linhaTotal = '<tr class="total-horas"><td><strong>TOTAL DE HORAS:</strong></td>';
             datas.forEach(data => {
                 const dataStr = data.toISOString().split('T')[0];
                 linhaTotal += `<td id="total-${dataStr}">0</td>`;
@@ -261,4 +270,3 @@
         });
     </script>
 }
-

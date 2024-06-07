@@ -4,45 +4,45 @@ using Myte.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false; 
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
 
-// Configure IdentityInitializer
 builder.Services.AddScoped<IdentityInitializer>();
 
-// Configuração das políticas de autorização
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequerPerfilAdmin",
         policy => policy.RequireRole("Admin"));
     options.AddPolicy("RequerPerfilFuncOuAdmin",
-        policy => policy.RequireRole("Func"));
+        policy => policy.RequireRole("Funcionario"));
 
     options.AddPolicy("RequerFuncOuAdmin", policy =>
         policy.RequireAssertion(context =>
-            context.User.IsInRole("Admin") || context.User.IsInRole("Func")
+            context.User.IsInRole("Admin") || context.User.IsInRole("Funcionario")
         ));
-
-    //options.AddPolicy("RequerFuncOuAdmin", policy =>
-    //    policy.RequireAssertion(context =>
-    //        context.User.HasClaim(c => c.Type == "Perfil" && (c.Value == "Func" || c.Value == "Admin"))
-    //    ));
 
 });
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -50,7 +50,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

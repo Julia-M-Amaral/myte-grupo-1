@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace Myte.Controllers
     public class RegistroesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RegistroesController(ApplicationDbContext context)
+        public RegistroesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult AdmIndex()
@@ -29,8 +32,20 @@ namespace Myte.Controllers
         // GET: Registroes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Registro.Include(r => r.Funcionario).Include(r => r.WBS);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+            if (funcionario == null)
+            {
+                return NotFound("Funcionário não encontrado.");
+            }
+
+            var registros = _context.Registro
+                .Include(r => r.Funcionario)
+                .Include(r => r.WBS)
+                .Where(r => r.FuncionarioId == funcionario.FuncionarioId);
+
+            return View(await registros.ToListAsync());
         }
 
         // GET: Registroes/Details/5
@@ -55,32 +70,45 @@ namespace Myte.Controllers
 
         // GET: Registroes/Create
         [HttpGet]
-        // GET: Registroes/Create
-        [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome");
+            var user = await _userManager.GetUserAsync(User);
+            var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+            if (funcionario == null)
+            {
+                return NotFound("Funcionário não encontrado.");
+            }
+
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo");
-            return View();
+            return View(new Registro { FuncionarioId = funcionario.FuncionarioId });
         }
 
         // POST: Registroes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RegistroId,FuncionarioId,WBSId,HorasTrab,DataRegistro")] Registro registro)
+        public async Task<IActionResult> Create([Bind("RegistroId,WBSId,HorasTrab,DataRegistro")] Registro registro)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                var funcionario = await _context.Funcionario.FirstOrDefaultAsync(f => f.Email == user.Email);
+
+                if (funcionario == null)
+                {
+                    return NotFound("Funcionário não encontrado.");
+                }
+
+                registro.FuncionarioId = funcionario.FuncionarioId;
                 _context.Add(registro);
                 await _context.SaveChangesAsync();
                 TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Set<Funcionario>(), "FuncionarioId", "FuncionarioNome", registro.FuncionarioId);
+
             ViewData["WBSId"] = new SelectList(_context.WBS, "WBSId", "Codigo", registro.WBSId);
             return View(registro);
         }
-
 
         // GET: Registroes/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -137,7 +165,7 @@ namespace Myte.Controllers
             return View(registro);
         }
 
-
+        [Authorize(Roles = "Admin")]
         // GET: Registroes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -158,6 +186,7 @@ namespace Myte.Controllers
             return View(registro);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Registroes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -177,7 +206,9 @@ namespace Myte.Controllers
         [HttpGet]
         public async Task<IActionResult> ObterOpcoesWBS()
         {
-            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo }).ToListAsync();
+            var opcoesWBS = await _context.WBS.Select(w => new { w.WBSId, w.Codigo, w.Tipos, w.Descricao }).ToListAsync();
+
+
             return Json(opcoesWBS);
         }
 
@@ -199,8 +230,6 @@ namespace Myte.Controllers
             TempData["message"] = "REGISTRO CADASTRADO COM SUCESSO";
             return Ok();
         }
-
-
 
         private bool RegistroExiste(int id)
         {

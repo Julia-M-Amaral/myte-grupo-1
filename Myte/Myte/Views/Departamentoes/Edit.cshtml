@@ -28,7 +28,7 @@
     .text-center-btn {
         display: flex;
         justify-content: center;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .white-background {
@@ -40,25 +40,25 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">EDITAR DEPARTAMENTO</h2>
+                    <h2 class="card-title text-center mb-4">Editar Departamento</h2>
                     <hr />
                     <div class="row justify-content-center">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <form asp-action="Edit">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="DepartamentoId" />
 
                                 <div class="form-group">
-                                    <label asp-for="DepartamentoNome" class="control-label">Nome do Departamento</label>
+                                    <label asp-for="DepartamentoNome" class="control-label"><strong>Nome do Departamento:</strong></label>
                                     <input asp-for="DepartamentoNome" class="form-control" />
                                     <span asp-validation-for="DepartamentoNome" class="text-danger"></span>
                                 </div>
                                 <br />
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-dark">Editar</button> |
+                                    <button type="submit" class="btn btn-dark">Salvar</button> |
                                     <a asp-action="Index" class="btn btn-secondary ml-3">Voltar</a>
                                 </div>
                             </form>

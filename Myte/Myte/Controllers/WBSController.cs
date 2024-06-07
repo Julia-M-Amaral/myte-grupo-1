@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Myte.Data;
 using Myte.Models;
+using Myte.Models.Enums;
 
 namespace Myte.Controllers
 {
@@ -63,6 +64,7 @@ namespace Myte.Controllers
         // GET: WBS/Create
         public IActionResult Create()
         {
+            ViewData["Tipos"] = new SelectList(Enum.GetValues(typeof(TiposWBS)).Cast<TiposWBS>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text");
             return View();
         }
 
@@ -81,6 +83,7 @@ namespace Myte.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
+            ViewData["Tipos"] = new SelectList(Enum.GetValues(typeof(TiposWBS)).Cast<TiposWBS>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text", wBS.Tipos);
             return View(wBS);
         }
 
@@ -97,6 +100,7 @@ namespace Myte.Controllers
             {
                 return NotFound();
             }
+            ViewData["Tipos"] = new SelectList(Enum.GetValues(typeof(TiposWBS)).Cast<TiposWBS>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text", wBS.Tipos);
             return View(wBS);
         }
 
@@ -134,6 +138,7 @@ namespace Myte.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Tipos"] = new SelectList(Enum.GetValues(typeof(TiposWBS)).Cast<TiposWBS>().Select(e => new { Value = e, Text = e.ToString() }), "Value", "Text", wBS.Tipos);
             return View(wBS);
         }
 

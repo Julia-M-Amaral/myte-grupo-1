@@ -21,7 +21,7 @@ namespace Myte.Models
         public string? Senha { get; set; }
 
         [Required(ErrorMessage = "A data de contratação é obrigatória")]
-        [Display(Name = "Data De Contratação")]
+        [Display(Name = "Data de Contratação")]
         [DataType(DataType.Date)]
         public DateTime DataContratacao { get; set; }
 
@@ -32,7 +32,7 @@ namespace Myte.Models
         public int DepartamentoId { get; set; }
 
         [Display(Name = "Nível de Acesso")]
-        public string? NivelAcesso { get; set; } = "Funcionario";
+        public string? NivelAcesso { get; set; } = "Funcionário";
 
         [Required(ErrorMessage = "O status do funcionário é obrigatório")]
         [Display(Name = "Status")]
